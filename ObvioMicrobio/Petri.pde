@@ -1,45 +1,42 @@
 class Petri {
-  ArrayList<Vec2> points;
+  int sides;
+  float radius;
 
   Petri() {
-    points = new ArrayList();
+    sides = 100;
+    radius = height / 2;
     makeBody();
   }
 
   void makeBody() {
     BodyDef bodyDef = new BodyDef();
     bodyDef.setPosition(new Vec2(0, 0));
-
     Body body = box2d.createBody(bodyDef);
 
     //Crear Puntos
-    float angle = TWO_PI / 50;
-    float radius = height / 2;
-    for (float a = 0; a < TWO_PI; a += angle) {
+    Vec2[] worldPoints = new Vec2[sides];
+    float angle = TWO_PI / sides;
+    float a = 0;
+    for (int i = 0; i < sides - 1; i++) {
       float sx = width/2 + cos(a) * radius;
       float sy = height/ 2 + sin(a) * radius;
-      points.add(new Vec2(sx, sy));
+      Vec2 vec2 = new Vec2(sx, sy);
+      worldPoints[i] = box2d.coordPixelsToWorld(vec2);
+      a += angle;
     }
-    points.add(new Vec2(width/2 + cos(0) * radius, height/ 2 + sin(0) * radius));  
+    Vec2 last = new Vec2(width/2 + cos(0) * radius, height/ 2 + sin(0) * radius); 
+    worldPoints[sides - 1] = box2d.coordPixelsToWorld(last);
 
-    Vec2[] worldPoints = new Vec2[points.size()];
-    for (int i = 0; i < points.size(); i++) {
-      worldPoints[i] = box2d.coordPixelsToWorld(points.get(i));
-    }
-
+    //Crear ChainShape
     ChainShape chainShape = new ChainShape();
-    chainShape.createChain(worldPoints, worldPoints.length);
-
+    chainShape.createChain(worldPoints, sides);
     body.createFixture(chainShape, 1);
   }
 
   void display() {
     strokeWeight(3);
     stroke(255);
-    for (int i = 0; i < points.size() - 1; i++) {
-      Vec2 a = points.get(i);
-      Vec2 b = points.get(i+1);
-      line(a.x, a.y, b.x, b.y);
-    }
+    noFill();
+    ellipse(width/2, height/2, radius*2, radius*2);
   }
 }
