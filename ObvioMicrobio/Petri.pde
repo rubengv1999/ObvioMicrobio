@@ -24,8 +24,7 @@ class Petri {
       worldPoints[i] = box2d.coordPixelsToWorld(vec2);
       a += angle;
     }
-    Vec2 last = new Vec2(width/2 + cos(0) * radius, height/ 2 + sin(0) * radius); 
-    worldPoints[sides - 1] = box2d.coordPixelsToWorld(last);
+    worldPoints[sides - 1] = worldPoints[0];
 
     //Crear ChainShape
     ChainShape chainShape = new ChainShape();

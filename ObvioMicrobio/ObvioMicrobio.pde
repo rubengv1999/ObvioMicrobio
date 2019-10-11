@@ -15,7 +15,7 @@ ArrayList<Bacteria> bacterias;
 void setup() {
   fullScreen(P2D);
   box2d = new Box2DProcessing(this);
-  box2d.createWorld(new Vec2(0, 0));
+  box2d.createWorld();
   petri = new Petri();
   bacterias = new ArrayList();
 }
@@ -25,7 +25,7 @@ void draw() {
   background(0);
   petri.display();
   box2d.step();  
-  
+
   //Proceso Bacterias
   Iterator<Bacteria> it = bacterias.iterator();
   while (it.hasNext()) {
@@ -33,7 +33,7 @@ void draw() {
     bacteria.display();
     if (bacteria.isDead()) it.remove();
   }
-  if (mousePressed) {
-    bacterias.add(new Bacteria(mouseX, mouseY, random(10, 20)));
-  }
+  
+  //Agregar bacterias
+  if (mousePressed) bacterias.add(new Bacteria(mouseX, mouseY, random(10, 20)));
 }
