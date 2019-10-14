@@ -4,7 +4,7 @@ class Petri {
 
   Petri() {
     sides = 100;
-    radius = height / 2;
+    radius = height / 2 - 10;
     makeBody();
   }
 
@@ -33,9 +33,9 @@ class Petri {
   }
 
   void display() {
-    strokeWeight(3);
-    stroke(255);
-    noFill();
+    strokeWeight(5);
+    stroke(#eaeaea);
+    fill(#eaeaea,200);
     ellipse(width/2, height/2, radius*2, radius*2);
   }
 }

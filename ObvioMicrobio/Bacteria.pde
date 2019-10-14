@@ -32,7 +32,7 @@ class Bacteria {
 
   void display() {
     fill(c);
-    stroke(255);
+    noStroke();
     rectMode(CENTER);
     Vec2 pos = box2d.getBodyPixelCoord(body);
     float ang = body.getAngle();
