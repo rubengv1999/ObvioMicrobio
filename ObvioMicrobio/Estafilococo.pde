@@ -1,26 +1,19 @@
-class Bacteria {
-  float x, y, w, h;
-  Body body;
-  color c;
-  PImage img;
-
-  Bacteria(float x, float y, float w, float h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.c = color(random(255), random(255), random(255));
-    createBody();
+class Estafilococo extends Bacteria{
+  Estafilococo(float x, float y, float w, float h){
+    super(x, y, w, h);
+    this.img = loadImage("images/estafilococo.png");
   }
-
+  
   void createBody() {
     BodyDef bodyDef = new BodyDef();
     bodyDef.type = BodyType.DYNAMIC;
     bodyDef.setPosition(box2d.coordPixelsToWorld(x, y));
     body = box2d.createBody(bodyDef);
 
-    CircleShape shape = new CircleShape();
-    shape.setRadius(box2d.scalarPixelsToWorld(w/2));
+    PolygonShape shape = new PolygonShape();
+    float w2d = box2d.scalarPixelsToWorld(w/2);
+    float h2d = box2d.scalarPixelsToWorld(h/2);
+    shape.setAsBox(w2d, h2d);
 
     FixtureDef fixtureDef = new FixtureDef();
     fixtureDef.shape = shape;
@@ -30,10 +23,10 @@ class Bacteria {
 
     body.createFixture(fixtureDef);
   }
-
-
+   
   void display() {
-    fill(c);
+    //fill(c);
+    noFill();
     noStroke();
     rectMode(CENTER);
     Vec2 pos = box2d.getBodyPixelCoord(body);
@@ -41,18 +34,8 @@ class Bacteria {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(-ang);
-    ellipse(0, 0, w, w);
+    rect(0, 0, w, h);
+    image(img, -(w/2), -(h/2), w, h);
     popMatrix();
-  }
-
-
-  boolean isDead() {
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    if (pos.y > height + w)
-    {
-      box2d.destroyBody(body);
-      return true;
-    }
-    return false;
   }
 }
