@@ -1,4 +1,4 @@
-class Bacteria {
+class Bacteria implements IBacteria{
   float x, y, w, h;
   Body body;
   color c;
@@ -30,7 +30,10 @@ class Bacteria {
 
     body.createFixture(fixtureDef);
   }
-
+  
+  void applyEnvironment(){
+    
+  }
 
   void display() {
     fill(c);
@@ -46,6 +49,7 @@ class Bacteria {
   }
 
 
+
   boolean isDead() {
     Vec2 pos = box2d.getBodyPixelCoord(body);
     if (pos.y > height + w)
@@ -55,4 +59,9 @@ class Bacteria {
     }
     return false;
   }
+  
+  public void applyAcidez(){}; 
+  public void applyHumedad(){};
+  public void applyOxigeno(){};
+  public void applyNutrientes(){};
 }

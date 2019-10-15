@@ -1,4 +1,4 @@
-class Clostridium extends Bacteria{
+class Clostridium extends Bacteria implements IBacteria{
   Clostridium(float x, float y, float w, float h){
     super(x, y, w, h);
     this.img = loadImage("images/clostridium.png");
@@ -18,4 +18,9 @@ class Clostridium extends Bacteria{
     image(img, -(w/2), -(w/2), w, w);
     popMatrix();
   }
+  
+  public void applyAcidez(){}; 
+  public void applyHumedad(){};
+  public void applyOxigeno(){};
+  public void applyNutrientes(){};
 }

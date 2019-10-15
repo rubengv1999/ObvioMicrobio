@@ -1,4 +1,4 @@
-class Ecoli extends Bacteria{
+class Ecoli extends Bacteria implements IBacteria{
   Ecoli(float x, float y, float w, float h){
     super(x, y, w, h);
     this.img = loadImage("images/ecoli.png");
@@ -38,4 +38,9 @@ class Ecoli extends Bacteria{
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
+  
+  public void applyAcidez(){}; 
+  public void applyHumedad(){};
+  public void applyOxigeno(){};
+  public void applyNutrientes(){};
 }

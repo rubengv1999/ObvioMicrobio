@@ -38,6 +38,10 @@ void draw() {
   while (it.hasNext()) {
     Bacteria bacteria = it.next();
     bacteria.display();
+    bacteria.applyAcidez(); 
+    bacteria.applyHumedad();
+    bacteria.applyOxigeno();
+    bacteria.applyNutrientes();
     if (bacteria.isDead()) it.remove();
   }
 
@@ -47,7 +51,6 @@ void draw() {
   //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 40, 40));
   //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 40, 36));
   //if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 40, 40));
-  
 }
 
 void initControls() {

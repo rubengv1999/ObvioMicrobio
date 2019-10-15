@@ -1,4 +1,4 @@
-class Estafilococo extends Bacteria{
+class Estafilococo extends Bacteria implements IBacteria{
   Estafilococo(float x, float y, float w, float h){
     super(x, y, w, h);
     this.img = loadImage("images/estafilococo.png");
@@ -38,4 +38,9 @@ class Estafilococo extends Bacteria{
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
+  
+  public void applyAcidez(){}; 
+  public void applyHumedad(){};
+  public void applyOxigeno(){};
+  public void applyNutrientes(){};
 }
