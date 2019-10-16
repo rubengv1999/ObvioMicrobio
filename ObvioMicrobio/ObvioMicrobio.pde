@@ -38,10 +38,7 @@ void draw() {
   while (it.hasNext()) {
     Bacteria bacteria = it.next();
     bacteria.display();
-    bacteria.applyAcidez(); 
-    bacteria.applyHumedad();
-    bacteria.applyOxigeno();
-    bacteria.applyNutrientes();
+    bacteria.applyAll(); 
     if (bacteria.isDead()) it.remove();
   }
 

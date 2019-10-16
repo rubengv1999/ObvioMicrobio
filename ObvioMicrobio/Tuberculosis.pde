@@ -1,4 +1,4 @@
-class Tuberculosis extends Bacteria implements IBacteria{
+class Tuberculosis extends Bacteria{
   Tuberculosis(float x, float y, float w, float h){
     super(x, y, w, h);
     this.img = loadImage("images/tuberculosis.png");
@@ -39,8 +39,8 @@ class Tuberculosis extends Bacteria implements IBacteria{
     popMatrix();
   }
   
-  public void applyAcidez(){}; 
-  public void applyHumedad(){};
-  public void applyOxigeno(){};
-  public void applyNutrientes(){};
+  public void applyAcidez(){}
+  public void applyHumedad(){}
+  public void applyOxigeno(){}
+  public void applyNutrientes(){}
 }

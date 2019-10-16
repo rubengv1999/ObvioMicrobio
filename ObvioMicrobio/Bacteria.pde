@@ -1,4 +1,4 @@
-class Bacteria implements IBacteria{
+abstract class Bacteria {
   float x, y, w, h;
   Body body;
   color c;
@@ -30,9 +30,8 @@ class Bacteria implements IBacteria{
 
     body.createFixture(fixtureDef);
   }
-  
-  void applyEnvironment(){
-    
+
+  void applyEnvironment() {
   }
 
   void display() {
@@ -48,6 +47,13 @@ class Bacteria implements IBacteria{
     popMatrix();
   }
 
+  public void applyAll() {
+    applyAcidez();
+    applyHumedad();
+    applyOxigeno();
+    applyNutrientes();
+  }
+
 
 
   boolean isDead() {
@@ -59,9 +65,9 @@ class Bacteria implements IBacteria{
     }
     return false;
   }
-  
-  public void applyAcidez(){}; 
-  public void applyHumedad(){};
-  public void applyOxigeno(){};
-  public void applyNutrientes(){};
+
+  public abstract void applyAcidez(); 
+  public abstract void applyHumedad();
+  public abstract void applyOxigeno();
+  public abstract void applyNutrientes();
 }

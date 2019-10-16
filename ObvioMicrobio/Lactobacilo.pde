@@ -1,4 +1,4 @@
-class Lactobacilo extends Bacteria implements IBacteria{
+class Lactobacilo extends Bacteria{
   Lactobacilo(float x, float y, float w, float h){
     super(x, y, w, h);
     this.img = loadImage("images/lactobacillus.png");
@@ -19,8 +19,8 @@ class Lactobacilo extends Bacteria implements IBacteria{
     popMatrix();
   }
   
-  public void applyAcidez(){}; 
-  public void applyHumedad(){};
-  public void applyOxigeno(){};
-  public void applyNutrientes(){};
+  public void applyAcidez(){}
+  public void applyHumedad(){}
+  public void applyOxigeno(){}
+  public void applyNutrientes(){}
 }
