@@ -1,9 +1,9 @@
-class Clostridium extends Bacteria{
-  Clostridium(float x, float y, float w, float h){
+class Clostridium extends Bacteria {
+  Clostridium(float x, float y, float w, float h) {
     super(x, y, w, h);
     this.img = loadImage("images/clostridium.png");
   }
-   
+
   void display() {
     //fill(c);
     noFill();
@@ -18,9 +18,13 @@ class Clostridium extends Bacteria{
     image(img, -(w/2), -(w/2), w, w);
     popMatrix();
   }
-  
-  public void applyAcidez(){}
-  public void applyHumedad(){}
-  public void applyOxigeno(){}
-  public void applyNutrientes(){}
+
+  public void applyAcidez() {
+  }
+  public void applyHumedad() {
+  }
+  public void applyOxigeno() {
+  }
+  public void applyNutrientes() {
+  }
 }

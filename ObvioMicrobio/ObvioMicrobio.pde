@@ -43,11 +43,11 @@ void draw() {
   }
 
   //Agregar bacterias
-  if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 20, 40));
-  //if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 40, 40));
-  //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 40, 40));
-  //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 40, 36));
-  //if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 40, 40));
+  if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
+  //if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
+  //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
+  //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
+  //if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 20, 20));
 }
 
 void initControls() {

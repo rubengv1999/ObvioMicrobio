@@ -35,7 +35,7 @@ class Petri {
   void display() {
     strokeWeight(5);
     stroke(#eaeaea);
-    fill(#eaeaea,200);
+    fill(#eaeaea, 200);
     ellipse(width/2, height/2, radius*2, radius*2);
   }
 }

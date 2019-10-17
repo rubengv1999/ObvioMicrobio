@@ -1,9 +1,9 @@
-class Estafilococo extends Bacteria{
-  Estafilococo(float x, float y, float w, float h){
+class Estafilococo extends Bacteria {
+  Estafilococo(float x, float y, float w, float h) {
     super(x, y, w, h);
     this.img = loadImage("images/estafilococo.png");
   }
-  
+
   void createBody() {
     BodyDef bodyDef = new BodyDef();
     bodyDef.type = BodyType.DYNAMIC;
@@ -23,7 +23,7 @@ class Estafilococo extends Bacteria{
 
     body.createFixture(fixtureDef);
   }
-   
+
   void display() {
     //fill(c);
     noFill();
@@ -38,9 +38,13 @@ class Estafilococo extends Bacteria{
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
-  
-  public void applyAcidez(){}
-  public void applyHumedad(){}
-  public void applyOxigeno(){}
-  public void applyNutrientes(){}
+
+  public void applyAcidez() {
+  }
+  public void applyHumedad() {
+  }
+  public void applyOxigeno() {
+  }
+  public void applyNutrientes() {
+  }
 }
