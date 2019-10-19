@@ -12,8 +12,10 @@ import controlP5.*;
 Petri petri;
 Box2DProcessing box2d;
 ArrayList<Bacteria> bacterias;
+ArrayList<Nutrient> nutrients;
 ControlP5 cp5;
-
+float acidity, humidity, nutrientsProb;
+boolean oxygen;
 
 //Setup
 void setup() {
@@ -22,6 +24,11 @@ void setup() {
   box2d.createWorld(new Vec2(0, 0));
   petri = new Petri();
   bacterias = new ArrayList();
+  nutrients = new ArrayList();
+  oxygen = true;
+  acidity = 7;
+  humidity = 0.9;
+  nutrientsProb = 0.1;
   initControls();
 }
 
@@ -31,7 +38,7 @@ void draw() {
   fill(0);
   initText();
   petri.display();
-  box2d.step();  
+  box2d.step();    
 
   //Proceso Bacterias
   Iterator<Bacteria> it = bacterias.iterator();
@@ -48,45 +55,63 @@ void draw() {
   //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
   //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
   //if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 20, 20));
+
+  if (random(1) < nutrientsProb && frameCount % 10 == 0) {
+    Nutrient nutrient = new Nutrient();
+    nutrients.add(nutrient);
+  }
+
+  //Proceso Bacterias
+  Iterator<Nutrient> itN = nutrients.iterator();
+  while (itN.hasNext()) {
+    Nutrient nutrient = itN.next();
+    nutrient.display();
+  }
 }
 
 void initControls() {
   pushMatrix();
   cp5 = new ControlP5(this);
-  cp5.addSlider("acidez")
+  cp5.addSlider("acidity")
     .setPosition(10, 60)
     .setSize(200, 20)
-    .setRange(0.01, 1)
+    .setRange(0, 14)
     .setColorLabel(0x00000000);
-  cp5.addSlider("humedad")
+  cp5.addSlider("humidity")
     .setPosition(10, 90)
     .setSize(200, 20)
-    .setRange(0.01, 100)
+    .setRange(0, 1)
     .setColorLabel(0x00000000);
-  cp5.addSlider("oxigeno")
+  cp5.addSlider("nutrientsProb")
     .setPosition(10, 120)
     .setSize(200, 20)
-    .setRange(0.01, 1)
+    .setRange(0, 1)
     .setColorLabel(0x00000000);
-  cp5.addSlider("nutrientes")
+  cp5.addToggle("oxygen")
     .setPosition(10, 150)
     .setSize(200, 20)
-    .setRange(0.01, 1)
+    .setValue(true)
+    .setMode(ControlP5.SWITCH)
     .setColorLabel(0x00000000);
-  cp5.addDropdownList("Bacteria")
-    .setPosition(10, 180)
-    .setBackgroundColor(color(0, 45, 90))
-    .setItemHeight(20)
-    .setBarHeight(20)
-    .setWidth(200)
-    .setHeight(120)
-    .setColorBackground(color(0, 45, 90))
-    .setColorActive(color(255, 128))
-    .addItem("Escherichia coli", 1)
-    .addItem("Lactobacilos", 2)
-    .addItem("Clostridium perfringens", 3)
-    .addItem("Estafilococo dorado", 4)
-    .addItem("Mycobacterium tuberculosis", 5);
+
+
+
+
+  /*  cp5.addDropdownList("Bacteria")
+   .setPosition(10, 60)
+   .setBackgroundColor(color(0, 45, 90))
+   .setItemHeight(20)
+   .setBarHeight(20)
+   .setWidth(200)
+   .setHeight(120)
+   .setColorBackground(color(0, 45, 90))
+   .setColorActive(color(255, 128))
+   .addItem("Escherichia coli", 1)
+   .addItem("Lactobacilos", 2)
+   .addItem("Clostridium perfringens", 3)
+   .addItem("Estafilococo dorado", 4)
+   .addItem("Mycobacterium tuberculosis", 5);
+   */
   popMatrix();
 }
 void initText() {

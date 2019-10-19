@@ -39,12 +39,12 @@ class Tuberculosis extends Bacteria {
     popMatrix();
   }
 
-  public void applyAcidez() {
+  public void applyAcidity() {
   }
-  public void applyHumedad() {
+  public void applyHumidity() {
   }
-  public void applyOxigeno() {
+  public void applyOxygen() {
   }
-  public void applyNutrientes() {
+  public void applyNutrients() {
   }
 }

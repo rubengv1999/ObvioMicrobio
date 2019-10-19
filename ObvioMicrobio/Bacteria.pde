@@ -1,8 +1,9 @@
 abstract class Bacteria {
-  float x, y, w, h;
+  float x, y, w, h, energy;
   Body body;
   color c;
   PImage img;
+  boolean dead;
 
   Bacteria(float x, float y, float w, float h) {
     this.x = x;
@@ -10,6 +11,8 @@ abstract class Bacteria {
     this.w = w;
     this.h = h;
     this.c = color(random(255), random(255), random(255));
+    this.dead = false;
+    this.energy = 100;
     createBody();
   }
 
@@ -31,9 +34,6 @@ abstract class Bacteria {
     body.createFixture(fixtureDef);
   }
 
-  void applyEnvironment() {
-  }
-
   void display() {
     fill(c);
     noStroke();
@@ -48,13 +48,11 @@ abstract class Bacteria {
   }
 
   public void applyAll() {
-    applyAcidez();
-    applyHumedad();
-    applyOxigeno();
-    applyNutrientes();
+    applyAcidity();
+    applyHumidity();
+    applyOxygen();
+    applyNutrients();
   }
-
-
 
   boolean isDead() {
     Vec2 pos = box2d.getBodyPixelCoord(body);
@@ -66,8 +64,8 @@ abstract class Bacteria {
     return false;
   }
 
-  public abstract void applyAcidez(); 
-  public abstract void applyHumedad();
-  public abstract void applyOxigeno();
-  public abstract void applyNutrientes();
+  public abstract void applyAcidity(); 
+  public abstract void applyHumidity();
+  public abstract void applyOxygen();
+  public abstract void applyNutrients();
 }
