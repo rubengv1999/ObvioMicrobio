@@ -50,6 +50,10 @@ class Nutrient {
   }
   
  boolean isDead() {
-    return capacity <= 0;
+    if (capacity <= 0){
+      box2d.destroyBody(body);
+      return true;
+    }
+    return false;
  }
 }

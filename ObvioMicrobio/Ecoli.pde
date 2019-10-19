@@ -47,9 +47,18 @@ class Ecoli extends Bacteria {
   public void applyOxygen() {
   }
   public void applyNutrients() {
-    for (Nutrient nutrient : this.nutrients) {
-      changeColor();
-      nutrient.capacity-=0.05;
+    if (nutrients.size() > 0) {
+      for (Nutrient nutrient : this.nutrients) {
+        w += 0.01;
+        h += 0.01;
+        changeColor();
+        nutrient.capacity-=0.1;
+      }
+      Vec2 pos = box2d.getBodyPixelCoord(body);
+      x = pos.x;
+      y = pos.y;
+      box2d.destroyBody(body);
+      createBody();
     }
   }
 }
