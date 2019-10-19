@@ -52,7 +52,7 @@ class Ecoli extends Bacteria {
         w += 0.01;
         h += 0.01;
         changeColor();
-        nutrient.capacity-=0.1;
+        nutrient.capacity -= 0.1;
       }
       Vec2 pos = box2d.getBodyPixelCoord(body);
       x = pos.x;
