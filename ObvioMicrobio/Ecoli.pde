@@ -22,21 +22,23 @@ class Ecoli extends Bacteria {
     fixtureDef.restitution = 0.5;
 
     body.createFixture(fixtureDef);
+    body.setUserData(this);
   }
 
-  void display() {
-    noFill();
-    noStroke();
-    rectMode(CENTER);
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    float ang = body.getAngle();
-    pushMatrix();
-    translate(pos.x, pos.y);
-    rotate(-ang);
-    rect(0, 0, w, h);
-    image(img, -(w/2), -(h/2), w, h);
-    popMatrix();
-  }
+  /* void display() {
+   noFill();
+   noStroke();
+   rectMode(CENTER);
+   Vec2 pos = box2d.getBodyPixelCoord(body);
+   float ang = body.getAngle();
+   pushMatrix();
+   translate(pos.x, pos.y);
+   rotate(-ang);
+   rect(0, 0, w, h);
+   image(img, -(w/2), -(h/2), w, h);
+   popMatrix();
+   }
+   */
 
   public void applyAcidity() {
   }
@@ -45,5 +47,9 @@ class Ecoli extends Bacteria {
   public void applyOxygen() {
   }
   public void applyNutrients() {
+    for (Nutrient nutrient : this.nutrients) {
+      changeColor();
+      nutrient.capacity-=0.05;
+    }
   }
 }

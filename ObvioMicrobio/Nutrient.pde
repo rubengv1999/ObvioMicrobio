@@ -1,6 +1,7 @@
 class Nutrient {
   float x, y, capacity, size;
   Body body;
+  
 
   Nutrient() {
     float randomX, randomY;
@@ -14,7 +15,6 @@ class Nutrient {
     this.y = randomY;
     this.capacity = random(100);
     size = (float)Math.sqrt(capacity);
-    System.out.println(size);
     createBody();
   }
   void createBody() {
@@ -33,10 +33,11 @@ class Nutrient {
     fixtureDef.restitution = 0.5;
 
     body.createFixture(fixtureDef);
+    body.setUserData(this);
   }
 
   void display() {
-    fill(0);
+    fill(0,capacity);
     noStroke();
     rectMode(CENTER);
     Vec2 pos = box2d.getBodyPixelCoord(body);
@@ -47,4 +48,8 @@ class Nutrient {
     ellipse(0, 0, size, size);
     popMatrix();
   }
+  
+ boolean isDead() {
+    return capacity <= 0;
+ }
 }

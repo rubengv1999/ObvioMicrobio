@@ -3,6 +3,8 @@ import shiffman.box2d.*;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
+import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.contacts.*;
 //Librerías Java
 import java.util.Iterator;
 //Librería ControlP5
@@ -22,6 +24,7 @@ void setup() {
   fullScreen(P2D);
   box2d = new Box2DProcessing(this);
   box2d.createWorld(new Vec2(0, 0));
+  box2d.listenForCollisions();
   petri = new Petri();
   bacterias = new ArrayList();
   nutrients = new ArrayList();
@@ -46,7 +49,7 @@ void draw() {
     Bacteria bacteria = it.next();
     bacteria.display();
     bacteria.applyAll(); 
-    if (bacteria.isDead()) it.remove();
+    bacteria.isDead();
   }
 
   //Agregar bacterias
@@ -66,6 +69,12 @@ void draw() {
   while (itN.hasNext()) {
     Nutrient nutrient = itN.next();
     nutrient.display();
+    if (nutrient.isDead()) { 
+      for (Bacteria bacteria : bacterias)
+        if (bacteria.nutrients.contains(nutrient))
+          bacteria.removeNutrient(nutrient);
+      itN.remove();
+    }
   }
 }
 
@@ -124,4 +133,42 @@ void initText() {
   text("José Fabio Hidalgo", width  - 150, height- 60); 
   text("Gerardo Villalobos Villalobos", width  - 150, height- 40); 
   text("Gabriel Vindas Brenes", width  - 150, height- 20);
+}
+
+void beginContact(Contact c) {
+  Object o1 = c.getFixtureA().getBody().getUserData();
+  Object o2 = c.getFixtureB().getBody().getUserData();
+  Bacteria bacteria = null;
+  Nutrient nutrient = null;
+  boolean colision = false;
+  if (o1 instanceof Bacteria && o2 instanceof Nutrient) {
+    bacteria = (Bacteria) o1;
+    nutrient = (Nutrient) o2;
+    colision = true;
+  }
+  if (o2 instanceof Bacteria && o1 instanceof Nutrient) {
+    bacteria = (Bacteria) o2;
+    nutrient = (Nutrient) o1;
+    colision = true;
+  }
+  if (colision) bacteria.addNutrient(nutrient);
+}
+
+void endContact(Contact c) {
+  Object o1 = c.getFixtureA().getBody().getUserData();
+  Object o2 = c.getFixtureB().getBody().getUserData();
+  Bacteria bacteria = null;
+  Nutrient nutrient = null;
+  boolean colision = false;
+  if (o1 instanceof Bacteria && o2 instanceof Nutrient) {
+    bacteria = (Bacteria) o1;
+    nutrient = (Nutrient) o2;
+    colision = true;
+  }
+  if (o2 instanceof Bacteria && o1 instanceof Nutrient) {
+    bacteria = (Bacteria) o2;
+    nutrient = (Nutrient) o1;
+    colision = true;
+  }
+  if (colision) bacteria.removeNutrient(nutrient);
 }

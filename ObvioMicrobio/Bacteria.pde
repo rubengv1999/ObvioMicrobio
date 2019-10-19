@@ -4,15 +4,17 @@ abstract class Bacteria {
   color c;
   PImage img;
   boolean dead;
+  ArrayList<Nutrient> nutrients;
 
   Bacteria(float x, float y, float w, float h) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
-    this.c = color(random(255), random(255), random(255));
+    this.c = color(#FFFFFF);
     this.dead = false;
     this.energy = 100;
+    nutrients = new ArrayList();
     createBody();
   }
 
@@ -32,6 +34,7 @@ abstract class Bacteria {
     fixtureDef.restitution = 0.5;
 
     body.createFixture(fixtureDef);
+    body.setUserData(this);
   }
 
   void display() {
@@ -54,14 +57,26 @@ abstract class Bacteria {
     applyNutrients();
   }
 
-  boolean isDead() {
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    if (pos.y > height + w)
-    {
-      box2d.destroyBody(body);
-      return true;
-    }
-    return false;
+  void isDead() {
+    if (energy <= 0)
+      dead = true;
+  }
+  
+   void changeColor() {
+    c = color(#6281D3);
+  }
+  void revertColor() {
+    c = color(#880062);
+  }
+  
+  void addNutrient(Nutrient nutrient){
+    this.nutrients.add(nutrient);
+    changeColor();
+  }
+  
+  void removeNutrient(Nutrient nutrient){
+    this.nutrients.remove(nutrient);
+    revertColor();
   }
 
   public abstract void applyAcidity(); 
