@@ -41,6 +41,9 @@ class Ecoli extends Bacteria {
    */
 
   public void applyAcidity() {
+    if (acidity > 7 || acidity < 7) {
+      dead = true;
+    }
   }
   public void applyHumidity() {
   }
