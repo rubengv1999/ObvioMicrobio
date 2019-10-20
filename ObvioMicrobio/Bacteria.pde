@@ -1,5 +1,5 @@
 abstract class Bacteria {
-  float x, y, w, h, energy;
+  float x, y, w, h, energy, initW, initH, incrementSize;
   Body body;
   color c;
   PImage img;
@@ -11,6 +11,8 @@ abstract class Bacteria {
     this.y = y;
     this.w = w;
     this.h = h;
+    this.initW = w;
+    this.initH = h;
     this.c = color(#FFFFFF);
     this.dead = false;
     this.energy = 100;
@@ -61,26 +63,57 @@ abstract class Bacteria {
     if (energy <= 0)
       dead = true;
   }
-  
-   void changeColor() {
+
+  void changeColor() {
     c = color(#6281D3);
   }
   void revertColor() {
     c = color(#880062);
   }
-  
-  void addNutrient(Nutrient nutrient){
+
+  void addNutrient(Nutrient nutrient) {
     this.nutrients.add(nutrient);
     changeColor();
   }
-  
-  void removeNutrient(Nutrient nutrient){
+
+  void removeNutrient(Nutrient nutrient) {
     this.nutrients.remove(nutrient);
     revertColor();
   }
 
+  public void restart() {
+    w = initW;
+    h = initH;
+    Vec2 pos = box2d.getBodyPixelCoord(body);
+    x = pos.x;
+    y = pos.y;
+    box2d.destroyBody(body);
+    createBody();
+  }
+  
+  void applyForce(Vec2 force){
+    Vec2 pos = body.getWorldCenter();
+    body.applyForce(force, pos);
+  }
+  
+  public void applyNutrients() {
+    if (nutrients.size() > 0) {
+      for (Nutrient nutrient : this.nutrients) {
+        w = w * incrementSize;
+        h = h * incrementSize;
+        //changeColor();
+        nutrient.capacity -= 0.1;
+      }
+      Vec2 pos = box2d.getBodyPixelCoord(body);
+      x = pos.x;
+      y = pos.y;
+      box2d.destroyBody(body);
+      createBody();
+    }
+  }
+  
   public abstract void applyAcidity(); 
   public abstract void applyHumidity();
   public abstract void applyOxygen();
-  public abstract void applyNutrients();
+  abstract boolean isReady();
 }

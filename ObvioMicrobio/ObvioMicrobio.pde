@@ -33,6 +33,8 @@ void setup() {
   humidity = 0.9;
   nutrientsProb = 0.1;
   initControls();
+
+  //bacterias.add(new Ecoli(width/2, height/2, 15, 30));
 }
 
 //Draw
@@ -43,13 +45,28 @@ void draw() {
   petri.display();
   box2d.step();    
 
+  ArrayList<Bacteria> nuevasBac = new ArrayList();
+
   //Proceso Bacterias
-  Iterator<Bacteria> it = bacterias.iterator();
-  while (it.hasNext()) {
-    Bacteria bacteria = it.next();
+  //Iterator<Bacteria> it = bacterias.iterator();
+  //while (it.hasNext()) {
+  for (Bacteria bacteria : bacterias) {
     bacteria.display();
-    bacteria.applyAll(); 
-    bacteria.isDead();
+    if (! bacteria.dead) {
+      bacteria.applyAll(); 
+      bacteria.isDead();
+      if (bacteria.isReady()) {
+        bacteria.restart();
+        Bacteria newBac = new Ecoli(bacteria.x, bacteria.y, 15, 30);
+        newBac.energy = bacteria.energy;
+        nuevasBac.add(newBac);
+        
+      }
+    }
+  }
+
+  for(Bacteria bac : nuevasBac){
+    bacterias.add(bac);
   }
 
   //Agregar bacterias

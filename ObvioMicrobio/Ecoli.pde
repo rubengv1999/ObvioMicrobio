@@ -2,6 +2,7 @@ class Ecoli extends Bacteria {
   Ecoli(float x, float y, float w, float h) {
     super(x, y, w, h);
     this.img = loadImage("images/ecoli.png");
+    this.incrementSize = 1.0005;
   }
 
   void createBody() {
@@ -25,20 +26,25 @@ class Ecoli extends Bacteria {
     body.setUserData(this);
   }
 
-  /* void display() {
-   noFill();
-   noStroke();
-   rectMode(CENTER);
-   Vec2 pos = box2d.getBodyPixelCoord(body);
-   float ang = body.getAngle();
-   pushMatrix();
-   translate(pos.x, pos.y);
-   rotate(-ang);
-   rect(0, 0, w, h);
-   image(img, -(w/2), -(h/2), w, h);
-   popMatrix();
-   }
-   */
+  void display() {
+    noFill();
+    noStroke();
+    rectMode(CENTER);
+    Vec2 pos = box2d.getBodyPixelCoord(body);
+    float ang = body.getAngle();
+    pushMatrix();
+    translate(pos.x, pos.y);
+    rotate(-ang);
+    rect(0, 0, w, h);
+    image(img, -(w/2), -(h/2), w, h);
+    popMatrix();
+  }
+
+  //void isDead() { //Especializar 
+  //  super.isDead();
+  //  this.img = loadImage("images/ecoliDeath.png");
+  //}
+
 
   public void applyAcidity() {
   }
@@ -46,19 +52,8 @@ class Ecoli extends Bacteria {
   }
   public void applyOxygen() {
   }
-  public void applyNutrients() {
-    if (nutrients.size() > 0) {
-      for (Nutrient nutrient : this.nutrients) {
-        w += 0.01;
-        h += 0.01;
-        changeColor();
-        nutrient.capacity -= 0.1;
-      }
-      Vec2 pos = box2d.getBodyPixelCoord(body);
-      x = pos.x;
-      y = pos.y;
-      box2d.destroyBody(body);
-      createBody();
-    }
+  
+  boolean isReady() {
+    return ((100 * w) / initW) >= 150;
   }
 }
