@@ -60,12 +60,11 @@ void draw() {
         Bacteria newBac = new Ecoli(bacteria.x, bacteria.y, 15, 30);
         newBac.energy = bacteria.energy;
         nuevasBac.add(newBac);
-        
       }
     }
   }
 
-  for(Bacteria bac : nuevasBac){
+  for (Bacteria bac : nuevasBac) {
     bacterias.add(bac);
   }
 
@@ -153,25 +152,15 @@ void initText() {
 }
 
 void beginContact(Contact c) {
-  Object o1 = c.getFixtureA().getBody().getUserData();
-  Object o2 = c.getFixtureB().getBody().getUserData();
-  Bacteria bacteria = null;
-  Nutrient nutrient = null;
-  boolean colision = false;
-  if (o1 instanceof Bacteria && o2 instanceof Nutrient) {
-    bacteria = (Bacteria) o1;
-    nutrient = (Nutrient) o2;
-    colision = true;
-  }
-  if (o2 instanceof Bacteria && o1 instanceof Nutrient) {
-    bacteria = (Bacteria) o2;
-    nutrient = (Nutrient) o1;
-    colision = true;
-  }
-  if (colision) bacteria.addNutrient(nutrient);
+  applyContact(c, true);
 }
 
 void endContact(Contact c) {
+
+  applyContact(c, false);
+}
+
+public void applyContact(Contact c, boolean contact) {
   Object o1 = c.getFixtureA().getBody().getUserData();
   Object o2 = c.getFixtureB().getBody().getUserData();
   Bacteria bacteria = null;
@@ -187,5 +176,10 @@ void endContact(Contact c) {
     nutrient = (Nutrient) o1;
     colision = true;
   }
-  if (colision) bacteria.removeNutrient(nutrient);
+  if (colision) {
+    if (contact) 
+      bacteria.addNutrient(nutrient);
+    else
+      bacteria.removeNutrient(nutrient);
+  }
 }
