@@ -34,7 +34,7 @@ void setup() {
   nutrientsProb = 0.1;
   initControls();
 
-  //bacterias.add(new Ecoli(width/2, height/2, 15, 30));
+  bacterias.add(new Ecoli(width/2, height/2, 15, 30));
 }
 
 //Draw
@@ -70,7 +70,7 @@ void draw() {
   }
 
   //Agregar bacterias
-  if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
+  //if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
   //if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
   //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
   //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
