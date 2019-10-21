@@ -15,6 +15,7 @@ Petri petri;
 Box2DProcessing box2d;
 ArrayList<Bacteria> bacterias;
 ArrayList<Nutrient> nutrients;
+ArrayList<Trash> waste;
 ControlP5 cp5;
 float acidity, humidity, nutrientsProb;
 boolean oxygen;
@@ -28,13 +29,24 @@ void setup() {
   petri = new Petri();
   bacterias = new ArrayList();
   nutrients = new ArrayList();
+  waste = new ArrayList();
   oxygen = true;
   acidity = 7;
   humidity = 0.9;
   nutrientsProb = 0.1;
   initControls();
 
-  bacterias.add(new Ecoli(width/2, height/2, 15, 30));
+  float randomX, randomY;
+  double distance;
+  for (int i = 0; i < 5; i++) {
+    do {
+      randomX = random(width);
+      randomY = random(height);
+      distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
+    } while (distance >  height / 2 - 20);
+
+    bacterias.add(new Ecoli(randomX, randomY, 15, 30));
+  }
 }
 
 //Draw
@@ -55,11 +67,17 @@ void draw() {
     if (! bacteria.dead) {
       bacteria.applyAll(); 
       bacteria.isDead();
-      if (bacteria.isReady()) {
-        bacteria.restart();
-        Bacteria newBac = new Ecoli(bacteria.x, bacteria.y, 15, 30);
-        newBac.energy = bacteria.energy;
-        nuevasBac.add(newBac);
+      if (! bacteria.dead) {
+        if (bacteria.isReady()) {
+          bacteria.restart();
+          Bacteria newBac = new Ecoli(bacteria.x, bacteria.y, 15, 30);
+          newBac.energy = bacteria.energy;
+          nuevasBac.add(newBac);
+        }
+        if (bacteria.generateTrash()) {
+          Trash basura = new Trash(bacteria.x, bacteria.y);
+          waste.add(basura);
+        }
       }
     }
   }
@@ -91,6 +109,10 @@ void draw() {
           bacteria.removeNutrient(nutrient);
       itN.remove();
     }
+  }
+
+  for (Trash trash : waste) {
+    trash.display();
   }
 }
 

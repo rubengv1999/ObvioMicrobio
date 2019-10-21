@@ -1,5 +1,5 @@
 abstract class Bacteria {
-  float x, y, w, h, energy, initW, initH, incrementSize;
+  float x, y, w, h, energy, initW, initH, incrementSize, trashPercent;
   Body body;
   color c;
   PImage img;
@@ -16,6 +16,7 @@ abstract class Bacteria {
     this.c = color(#FFFFFF);
     this.dead = false;
     this.energy = 100;
+    this.trashPercent = 0;
     nutrients = new ArrayList();
     createBody();
   }
@@ -103,6 +104,7 @@ abstract class Bacteria {
         h = h * incrementSize;
         //changeColor();
         nutrient.capacity -= 0.1;
+        trashPercent += 0.05;
       }
       Vec2 pos = box2d.getBodyPixelCoord(body);
       x = pos.x;
@@ -110,6 +112,15 @@ abstract class Bacteria {
       box2d.destroyBody(body);
       createBody();
     }
+  }
+  
+  public boolean generateTrash(){
+    if (trashPercent >= 40){
+      trashPercent = 0;
+      return true;
+    }
+    else
+      return false;
   }
   
   public abstract void applyAcidity(); 
