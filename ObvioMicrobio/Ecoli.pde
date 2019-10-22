@@ -40,11 +40,33 @@ class Ecoli extends Bacteria {
    }
    */
 
+  void display() {
+    noFill();
+    noStroke();
+    rectMode(CENTER);
+    Vec2 pos = box2d.getBodyPixelCoord(body);
+    float ang = body.getAngle();
+    pushMatrix();
+    translate(pos.x, pos.y);
+    rotate(-ang);
+    rect(0, 0, w, h);
+    //if (dead) this.img.filter(GRAY);
+    image(img, -(w/2), -(h/2), w, h);
+    popMatrix();
+  }
+
+  void isDead() { //Especializar 
+      super.isDead();
+      if(dead)
+      this.img.filter(GRAY);
+  }
+
+
+
   public void applyAcidity() {
     if (acidity > 9 || acidity < 5) {
       energy -= 1;
-    }
-    else if(acidity > 10 || acidity < 3){
+    } else if (acidity > 10 || acidity < 3) {
       energy -= 5;
     }
   }
@@ -52,6 +74,7 @@ class Ecoli extends Bacteria {
   }
   public void applyOxygen() {
   }
+
   public void applyNutrients() {
     if (nutrients.size() > 0) {
       for (Nutrient nutrient : this.nutrients) {
@@ -66,5 +89,10 @@ class Ecoli extends Bacteria {
       box2d.destroyBody(body);
       createBody();
     }
+  }
+
+
+  boolean isReady() {
+    return ((100 * w) /  initw) >= 150;
   }
 }
