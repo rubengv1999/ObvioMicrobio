@@ -40,10 +40,11 @@ class Ecoli extends Bacteria {
     popMatrix();
   }
 
-  //void isDead() { //Especializar 
-  //  super.isDead();
-  //  this.img = loadImage("images/ecoliDeath.png");
-  //}
+  void isDead() { //Especializar 
+    super.isDead();
+    if(dead)
+    this.img.filter(GRAY);
+  }
 
 
   public void applyAcidity() {
