@@ -1,6 +1,7 @@
 class Nutrient {
   float x, y, capacity, size;
   Body body;
+  Vec2 speed;
   
 
   Nutrient() {
@@ -10,11 +11,12 @@ class Nutrient {
       randomX = random(width);
       randomY = random(height);
       distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
-    } while (distance >  height / 2 - 10);
+    } while (distance >  height / 2 - 20);
     this.x = randomX;
     this.y = randomY;
     this.capacity = random(100);
-    size = (float)Math.sqrt(capacity);
+    this.speed = new Vec2(random(-25,25), random(-25,25));
+    this.size = (float)Math.sqrt(capacity);
     createBody();
   }
   void createBody() {
@@ -34,7 +36,11 @@ class Nutrient {
 
     body.createFixture(fixtureDef);
     body.setUserData(this);
+    
+    Vec2 pos = body.getWorldCenter();
+    body.applyForce(speed, pos);
   }
+  
 
   void display() {
     fill(0,capacity);

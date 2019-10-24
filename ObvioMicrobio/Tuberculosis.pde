@@ -2,6 +2,7 @@ class Tuberculosis extends Bacteria {
   Tuberculosis(float x, float y, float w, float h) {
     super(x, y, w, h);
     this.img = loadImage("images/tuberculosis.png");
+    this.incrementSize = 1.0; //especializar
   }
 
   void createBody() {
@@ -38,7 +39,8 @@ class Tuberculosis extends Bacteria {
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
-
+  void setMov(){
+  }
   public void applyAcidity() {
   }
   public void applyHumidity() {
@@ -46,5 +48,8 @@ class Tuberculosis extends Bacteria {
   public void applyOxygen() {
   }
   public void applyNutrients() {
+  }
+  boolean isReady() {
+    return false;
   }
 }

@@ -1,0 +1,31 @@
+Acidez
+Fabio
+	Energia
+	Visualmente acidez
+
+Humedad
+	Hacer todo lo de velocidad
+	Baja estaticos
+	Visual
+
+Oxigeno
+	Anaerobica: No se mueve
+	Aerobea: Quita energia muy rapido   
+	Las demas: No pasa nada
+	
+Nutrientes
+	Nada atrae nada 
+	Se mueven solos con una velocidad inicial
+		
+Movimiento
+	Respecto a su tamaño
+	
+
+Desechos
+
+
+Fabio: Muerte 
+Gerardo: Oxigeno
+Gabriel: Humedad y Velocidad de Bacteria
+Ruben: Velocidad de Nutrientes
+Casarola: Reproduccion y Desechos

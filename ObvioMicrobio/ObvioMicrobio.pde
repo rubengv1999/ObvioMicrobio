@@ -15,24 +15,39 @@ Petri petri;
 Box2DProcessing box2d;
 ArrayList<Bacteria> bacterias;
 ArrayList<Nutrient> nutrients;
+ArrayList<Trash> waste;
 ControlP5 cp5;
 float acidity, humidity, nutrientsProb;
 boolean oxygen;
 
 //Setup
 void setup() {
-  fullScreen(P2D);
+  //fullScreen(P2D);
+  size(900,600);
   box2d = new Box2DProcessing(this);
   box2d.createWorld(new Vec2(0, 0));
   box2d.listenForCollisions();
   petri = new Petri();
   bacterias = new ArrayList();
   nutrients = new ArrayList();
+  waste = new ArrayList();
   oxygen = true;
   acidity = 7;
   humidity = 0.9;
   nutrientsProb = 0.1;
   initControls();
+
+  float randomX, randomY;
+  double distance;
+  for (int i = 0; i < 5; i++) {
+    do {
+      randomX = random(width);
+      randomY = random(height);
+      distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
+    } while (distance >  height / 2 - 20);
+
+    bacterias.add(new Ecoli(randomX, randomY, 15, 30));
+  }
 }
 
 //Draw
@@ -40,20 +55,47 @@ void draw() {
   background(255);
   fill(0);
   initText();
-  petri.display();
+  petri.display(humidity);
+  //petri.displayHumidity(humidity);
   box2d.step();    
 
+  ArrayList<Bacteria> nuevasBac = new ArrayList();
+
   //Proceso Bacterias
-  Iterator<Bacteria> it = bacterias.iterator();
-  while (it.hasNext()) {
-    Bacteria bacteria = it.next();
+  //Iterator<Bacteria> it = bacterias.iterator();
+  //while (it.hasNext()){
+  for (Bacteria bacteria : bacterias){
     bacteria.display();
-    bacteria.applyAll(); 
-    bacteria.isDead();
+    if (! bacteria.dead) {
+      bacteria.applyAll();//---------
+      bacteria.isDead();
+      if (! bacteria.dead){
+        if (bacteria.isReady()){
+          bacteria.restart();
+          Bacteria newBac = new Ecoli(bacteria.x, bacteria.y, 15, 30);
+          newBac.energy = bacteria.energy;
+          nuevasBac.add(newBac);
+        }
+        if (bacteria.generateTrash()) {
+          Trash basura = new Trash(bacteria.x, bacteria.y);
+          waste.add(basura);
+        }
+      }
+    }
   }
 
+  for (Bacteria bac : nuevasBac) {
+    bacterias.add(bac);
+  }
+
+  if (mousePressed){
+    for(Bacteria b : bacterias){
+      b.setMov();
+    }
+  }
+  
   //Agregar bacterias
-  if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
+  //if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
   //if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
   //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
   //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
@@ -66,7 +108,7 @@ void draw() {
 
   //Proceso Bacterias
   Iterator<Nutrient> itN = nutrients.iterator();
-  while (itN.hasNext()) {
+  while (itN.hasNext()){
     Nutrient nutrient = itN.next();
     nutrient.display();
     if (nutrient.isDead()) { 
@@ -75,6 +117,10 @@ void draw() {
           bacteria.removeNutrient(nutrient);
       itN.remove();
     }
+  }
+
+  for (Trash trash : waste) {
+    trash.display();
   }
 }
 
@@ -136,25 +182,15 @@ void initText() {
 }
 
 void beginContact(Contact c) {
-  Object o1 = c.getFixtureA().getBody().getUserData();
-  Object o2 = c.getFixtureB().getBody().getUserData();
-  Bacteria bacteria = null;
-  Nutrient nutrient = null;
-  boolean colision = false;
-  if (o1 instanceof Bacteria && o2 instanceof Nutrient) {
-    bacteria = (Bacteria) o1;
-    nutrient = (Nutrient) o2;
-    colision = true;
-  }
-  if (o2 instanceof Bacteria && o1 instanceof Nutrient) {
-    bacteria = (Bacteria) o2;
-    nutrient = (Nutrient) o1;
-    colision = true;
-  }
-  if (colision) bacteria.addNutrient(nutrient);
+  applyContact(c, true);
 }
 
 void endContact(Contact c) {
+
+  applyContact(c, false);
+}
+
+public void applyContact(Contact c, boolean contact) {
   Object o1 = c.getFixtureA().getBody().getUserData();
   Object o2 = c.getFixtureB().getBody().getUserData();
   Bacteria bacteria = null;
@@ -170,5 +206,10 @@ void endContact(Contact c) {
     nutrient = (Nutrient) o1;
     colision = true;
   }
-  if (colision) bacteria.removeNutrient(nutrient);
+  if (colision) {
+    if (contact) 
+      bacteria.addNutrient(nutrient);
+    else
+      bacteria.removeNutrient(nutrient);
+  }
 }

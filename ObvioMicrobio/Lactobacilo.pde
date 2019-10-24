@@ -2,6 +2,7 @@ class Lactobacilo extends Bacteria {
   Lactobacilo(float x, float y, float w, float h) {
     super(x, y, w, h);
     this.img = loadImage("images/lactobacillus.png");
+    this.incrementSize = 1.0; //especializar
   }
 
   void display() {
@@ -18,7 +19,8 @@ class Lactobacilo extends Bacteria {
     image(img, -(w/2), -(w/2), w, w);
     popMatrix();
   }
-
+  void setMov(){
+  }
   public void applyAcidity() {
   }
   public void applyHumidity() {
@@ -26,5 +28,8 @@ class Lactobacilo extends Bacteria {
   public void applyOxygen() {
   }
   public void applyNutrients() {
+  }
+  boolean isReady() {
+    return false;
   }
 }
