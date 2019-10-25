@@ -26,10 +26,9 @@ class Ecoli extends Bacteria {
     body.setLinearVelocity(speed);//applyForce(speed);
     setRotation();
     body.setUserData(this);
-    
   }
 
-  void display(){
+  void display() {
     noFill();
     noStroke();
     rectMode(CENTER);
@@ -42,45 +41,82 @@ class Ecoli extends Bacteria {
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
+
+ 
+  //void slowDown() {    
+  //  println("------------------------------");
+  //  println("Body Before: " + body.getLinearVelocity().x + " " + body.getLinearVelocity().y);
+  //  println("Vel: " + body.getLinearVelocity().length());
+  //  //float brkPower = 0.7;
+  //  float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
+  //  float brkPower = map(humidity, 0, 0.9, maxSpeed, 0);
+  //  println("Initial Speed Mag: " + maxSpeed);
+  //  println("IS X: " + initialSpeed.x);
+  //  println("IS Y: " + initialSpeed.y);
+  //  println("Humidity: " + humidity);
+  //  println("Break Power: " + brkPower);
+  //  float curSpeed = body.getLinearVelocity().length();
+  //  println("Current Speed: " + curSpeed);
+  //  float newSpeed = curSpeed - brkPower;
+  //  println("New Speed: " + newSpeed);
+  //  if(newSpeed < 0){
+  //    newSpeed = 0;
+  //  }
+  //  Vec2 bodyVel = body.getLinearVelocity();
+  //  bodyVel.normalize();
+  //  println("BodyVel Normalized: " + bodyVel.x + " " + bodyVel.y);
+  //  bodyVel = bodyVel.mul(newSpeed);
+  //  println("BodyVel * Speed: " + bodyVel.x + " " + bodyVel.y);
+  //  body.setLinearVelocity(bodyVel);
+  //  println("Body After: " + body.getLinearVelocity().x + " " + body.getLinearVelocity().y);
+  //  println("Vel: " + body.getLinearVelocity().length());
+  //  println("------------------------------");    
+  //}
   
-  void setMov(){    
-    /*Vec2 humidityForce = new Vec2();    
-    Vec2 vel = body.getLinearVelocity();
-    humidityForce.x = (vel.y)*-1; //map(humidity, 0, 0.9, initialSpeedX, 0)*-1;    
-    humidityForce.y = (vel.y)*-1; //map(humidity, 0, 0.9, initialSpeedY, 0)*-1;
-    println("Current Velocity x = " + vel.x + "y = " + vel.y);    
-    applyForce(humidityForce);*/
-    Vec2 cant = new Vec2();    
-    if(speed.x < 0) speed.x += 0.1;
-    else if(speed.x > 0) speed.x -= 0.1;
-    else if(speed.y < 0) speed.y += 0.1;
-    else if(speed.y > 0) speed.y -= 0.1;    
-    body.setLinearVelocity(cant);
-  }
+  //void startMoving(){    
+  //  float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
+  //  //println("MaxSpeed: " + maxSpeed + "------------");
+  //  float movPower = 0.005;
+  //  float curSpeed = body.getLinearVelocity().length();
+  //  float newSpeed = curSpeed + movPower;
+  //  if(newSpeed > maxSpeed){
+  //    newSpeed = maxSpeed;
+  //  }
+  //  Vec2 bodyVel = body.getLinearVelocity();    
+  //  if(bodyVel.length() == 0){
+  //    body.setLinearVelocity(new Vec2(random(-0.01, 0.01),random(-0.01,0.01)));
+  //  }
+  //  bodyVel.normalize();
+  //  bodyVel = bodyVel.mul(newSpeed);
+  //  body.setLinearVelocity(bodyVel);                  
+  //}
 
-  void isDead(){//Especializar 
+  void isDead() {//Especializar
     super.isDead();
-    if(dead)
-    this.img.filter(GRAY);
+    if (dead)
+      this.img.filter(GRAY);
   }
 
 
-  public void applyAcidity(){
+  public void applyAcidity() {
     if (acidity > 9 || acidity < 5) {
       energy -= 1;
-    }
-    else if(acidity > 10 || acidity < 3){
+    } else if (acidity > 10 || acidity < 3) {
       energy -= 5;
     }
   }
   public void applyHumidity() {
-    //Movement
-    //setMovement();
-    
+    if(humidity < 0.9){
+      slowDown();
+    }
+    else{
+      startMoving();
+      //setRotation();
+    }
   }
   public void applyOxygen() {
   }
-  
+
   boolean isReady() {
     return ((100 * w) / initW) >= 150;
   }

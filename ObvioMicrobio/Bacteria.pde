@@ -6,8 +6,10 @@ abstract class Bacteria {
   PImage img;
   boolean dead;
   ArrayList<Nutrient> nutrients;
-  float initialSpeedX;
-  float initialSpeedY;
+  float speedRange;
+  Vec2 initialSpeed;
+  float iniVelX;
+  float iniVelY;
 
   Bacteria(float x, float y, float w, float h) {
     this.x = x;
@@ -20,9 +22,11 @@ abstract class Bacteria {
     this.dead = false;
     this.energy = 100;
     this.trashPercent = 0;
-    this.initialSpeedX = 1.5;
-    this.initialSpeedY = 1.5;
-    this.speed = new Vec2(random(-initialSpeedX, initialSpeedX), random(-initialSpeedY, initialSpeedY));
+    this.speedRange = 2.5;    
+    iniVelX = random(-speedRange, speedRange);
+    iniVelY = random(-speedRange, speedRange);
+    initialSpeed = new Vec2(iniVelX, iniVelY);
+    this.speed = new Vec2(iniVelX, iniVelY);
     nutrients = new ArrayList();
     createBody();
   }
@@ -45,7 +49,7 @@ abstract class Bacteria {
     body.createFixture(fixtureDef);    
     body.setUserData(this);
   }
-  
+
   void display() {
     fill(c);
     noStroke();
@@ -59,19 +63,19 @@ abstract class Bacteria {
     popMatrix();
   }
 
-  public void applyAll(){
+  public void applyAll() {
     applyAcidity();
     applyHumidity();
     applyOxygen();
     applyNutrients();
   }
 
-  void isDead(){
+  void isDead() {
     if (energy <= 0)
       dead = true;
   }
 
-  void changeColor(){
+  void changeColor() {
     c = color(#6281D3);
   }
   void revertColor() {
@@ -97,51 +101,67 @@ abstract class Bacteria {
     box2d.destroyBody(body);
     createBody();
   }
-   
-  
-  void setMovement(){
-    //Vec2 speed = new Vec2(random(-x, x), random(-y, y));
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    pos.add(speed);
-    //speed.limit();
-    //speed.x = 1;
-    //Vec2 force = new Vec2();    
-    //force.x = map(humidity, 0, 0.9, 0, initialSpeedX);
-    //force.y = map(humidity, 0, 0.9, 0, initialSpeedY);
-    println("Speed x = " + speed.x);
-    println("Speed y = " + speed.y);
-    //speed.x = map(humidity, 0, 1, 0, initialSpeedX);
-    //speed.y = map(humidity, 0, 1, 0, initialSpeedY);
-    //speed.x = speed.x - (2 - humidity);
-    //speed.y = speed.y - (2 - humidity);
-    //speed = speed.add(force);
-    println("After x = " + speed.x);
-    println("After y = " + speed.y);
-    
-    body.setLinearVelocity(speed);
-    //box2d.coordPixelsToWorld(pos);
-    x = pos.x;
-    y = pos.y;
+
+  //public abstract void slowDown();
+
+  void slowDown() {    
+    println("------------------------------");
+    println("Body Before: " + body.getLinearVelocity().x + " " + body.getLinearVelocity().y);
+    println("Vel: " + body.getLinearVelocity().length());
+    //float brkPower = 0.7;
+    float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
+    float brkPower = map(humidity, 0, 0.9, maxSpeed, 0)/150;
+    println("Initial Speed Mag: " + maxSpeed);
+    println("IS X: " + initialSpeed.x);
+    println("IS Y: " + initialSpeed.y);
+    println("Humidity: " + humidity);
+    println("Break Power: " + brkPower);
+    float curSpeed = body.getLinearVelocity().length();
+    println("Current Speed: " + curSpeed);
+    float newSpeed = curSpeed - brkPower;
+    println("New Speed: " + newSpeed);
+    if (newSpeed < 0) {
+      newSpeed = 0;
+      body.setAngularVelocity(0);
+    }
+    Vec2 bodyVel = body.getLinearVelocity();
+    bodyVel.normalize();
+    println("BodyVel Normalized: " + bodyVel.x + " " + bodyVel.y);
+    bodyVel = bodyVel.mul(newSpeed);
+    println("BodyVel * Speed: " + bodyVel.x + " " + bodyVel.y);
+    body.setLinearVelocity(bodyVel);
+    println("Body After: " + body.getLinearVelocity().x + " " + body.getLinearVelocity().y);
+    println("Vel: " + body.getLinearVelocity().length());
+    println("------------------------------");
   }
-  
-  public abstract void setMov();
-  
-    
-  
+
+  void startMoving() {    
+    float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
+    //println("MaxSpeed: " + maxSpeed + "------------");
+    float movPower = 0.005;
+    float curSpeed = body.getLinearVelocity().length();
+    float newSpeed = curSpeed + movPower;
+    if (newSpeed > maxSpeed) {
+      newSpeed = maxSpeed;      
+    }
+    Vec2 bodyVel = body.getLinearVelocity();    
+    if (bodyVel.length() == 0) {
+      body.setLinearVelocity(new Vec2(random(-0.01, 0.01), random(-0.01, 0.01)));
+    }
+    bodyVel.normalize();
+    bodyVel = bodyVel.mul(newSpeed);
+    body.setLinearVelocity(bodyVel);
+  }
+
   void setRotation(){
     body.setAngularVelocity(random(-PI, PI)/50);
-  }
-  
-  void slow(){
-    body.setLinearVelocity(speed);
-    body.setAngularVelocity(random(-PI, PI)/50);
-  }
-  
-  void applyForce(Vec2 force){//forces in meter
+  }  
+
+  void applyForce(Vec2 force) {//forces in meters
     Vec2 pos = body.getWorldCenter();
     body.applyForce(force, pos);
   }
-  
+
   public void applyNutrients() {
     if (nutrients.size() > 0) {
       for (Nutrient nutrient : this.nutrients) {
@@ -158,21 +178,17 @@ abstract class Bacteria {
       createBody();
     }
   }
-  
-  public boolean generateTrash(){
-    if (trashPercent >= 40){
+
+  public boolean generateTrash() {
+    if (trashPercent >= 40) {
       trashPercent = 0;
       return true;
-    }
-    else
+    } else
       return false;
   }
-  
+
   public abstract void applyAcidity(); 
-  public void applyHumidity(){
-    //Movement
-    //setMov();
-  };
+  public abstract void applyHumidity();
   public abstract void applyOxygen();
   abstract boolean isReady();
 }

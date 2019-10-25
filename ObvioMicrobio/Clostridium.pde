@@ -19,8 +19,7 @@ class Clostridium extends Bacteria {
     image(img, -(w/2), -(w/2), w, w);
     popMatrix();
   }
-  void setMov(){
-  }
+   
   public void applyAcidity() {
   }
   public void applyHumidity() {
