@@ -2,9 +2,11 @@ class Nutrient {
   float x, y, capacity, size;
   Body body;
   Vec2 speed;
+  ArrayList<Bacteria> eaters;
 
 
   Nutrient() {
+    eaters = new ArrayList();
     float randomX, randomY;
     double distance;
     do {
@@ -43,7 +45,7 @@ class Nutrient {
 
 
   void display() {
-    fill(#5BF72D, capacity);
+    fill(#3723C1, capacity);
     noStroke();
     rectMode(CENTER);
     Vec2 pos = box2d.getBodyPixelCoord(body);
@@ -58,8 +60,27 @@ class Nutrient {
   boolean isDead() {
     if (capacity <= 0) {
       box2d.destroyBody(body);
+      for (Bacteria bacteria : bacterias)
+        bacteria.nutrients--;
       return true;
     }
     return false;
+  }
+
+  void aliment() {
+    for (Bacteria bacteria : eaters) {
+      bacteria.eat();
+      capacity -= 0.1;
+    }
+  }
+
+  void addBacteria(Bacteria b) {
+    b.nutrients--;
+    eaters.add(b);
+  }
+
+  void removeBacteria(Bacteria b) {
+    b.nutrients--;
+    eaters.remove(b);
   }
 }

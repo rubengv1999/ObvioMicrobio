@@ -20,6 +20,7 @@ ArrayList<Trash> waste;
 ControlP5 cp5;
 float acidity, humidity, nutrientsProb;
 boolean oxygen;
+int deathBacterias;
 
 //Setup
 void setup() {
@@ -76,7 +77,7 @@ void draw() {
   }
 
 
-  
+
 
   if (random(1) < nutrientsProb && frameCount % 10 == 0) {
     Nutrient nutrient = new Nutrient();
@@ -88,10 +89,8 @@ void draw() {
   while (itN.hasNext()) {
     Nutrient nutrient = itN.next();
     nutrient.display();
+    nutrient.aliment();
     if (nutrient.isDead()) { 
-      for (Bacteria bacteria : bacterias)
-        if (bacteria.nutrients.contains(nutrient))
-          bacteria.removeNutrient(nutrient);
       itN.remove();
     }
   }
@@ -131,7 +130,7 @@ void initControls() {
   cp5.addButton("reiniciar")
     .setValue(0)
     .setPosition(10, height - 35)
-    .setSize(80, 25);
+    .setSize(100, 25);
 
 
 
@@ -157,6 +156,10 @@ void initText() {
   textSize(35);
   text("Parámetros", 15, 40); 
   textSize(10);
+  text("Bacterias Vivas: " + (bacterias.size() - deathBacterias), 10, height - 125); 
+  text("Bacterias Muertas: " + deathBacterias, 10, height - 100); 
+  text("Nutrientes: " + nutrients.size(), 10, height - 75); 
+  text("Desechos: " + waste.size(), 10, height - 50); 
   text("Rubén González Villanueva", width  - 150, height- 100); 
   text("José Daniel Gómez Casasola", width  - 150, height- 80); 
   text("José Fabio Hidalgo", width  - 150, height- 60); 
@@ -180,27 +183,25 @@ public void applyContact(Contact c, boolean contact) {
   Object o2 = c.getFixtureB().getBody().getUserData();
   Bacteria bacteria = null;
   Nutrient nutrient = null;
-  boolean colision = false;
   if (o1 instanceof Bacteria && o2 instanceof Nutrient) {
     bacteria = (Bacteria) o1;
     nutrient = (Nutrient) o2;
-    colision = true;
   }
   if (o2 instanceof Bacteria && o1 instanceof Nutrient) {
     bacteria = (Bacteria) o2;
     nutrient = (Nutrient) o1;
-    colision = true;
   }
-  if (colision) {
+  if (bacteria != null) {
     if (contact) {
-      if (humidity>=0.9)bacteria.addNutrient(nutrient);
+      if (humidity>=0.9)nutrient.addBacteria(bacteria);
     } else {
-      bacteria.removeNutrient(nutrient);
+      nutrient.removeBacteria(bacteria);
     }
   }
 }
 
 public void reiniciar() {
+  deathBacterias = 0;
   bacterias = new ArrayList();
   nutrients = new ArrayList();
   waste = new ArrayList();
@@ -218,8 +219,8 @@ public void reiniciar() {
 }
 
 //Agregar bacterias
-  //if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
-  //if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
-  //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
-  //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
-  //if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 20, 20));
+//if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
+//if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
+//if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
+//if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
+//if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 20, 20));

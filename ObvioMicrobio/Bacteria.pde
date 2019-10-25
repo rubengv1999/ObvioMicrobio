@@ -5,7 +5,7 @@ abstract class Bacteria {
   color c;
   PImage img;
   boolean dead;
-  ArrayList<Nutrient> nutrients;
+  int nutrients;
   float speedRange;
   Vec2 initialSpeed;
   float iniVelX;
@@ -27,7 +27,7 @@ abstract class Bacteria {
     iniVelY = random(-speedRange, speedRange);
     initialSpeed = new Vec2(iniVelX, iniVelY);
     this.speed = new Vec2(iniVelX, iniVelY);
-    nutrients = new ArrayList();
+    nutrients = 0;
     createBody();
   }
 
@@ -71,27 +71,13 @@ abstract class Bacteria {
   }
 
   void isDead() {
-    if (energy <= 0)
+    if (energy <= 0) {
       dead = true;
+      deathBacterias++;
+    }
   }
 
-  void changeColor() {
-    c = color(#6281D3);
-  }
-  void revertColor() {
-    c = color(#880062);
-  }
-
-  void addNutrient(Nutrient nutrient) {
-    this.nutrients.add(nutrient);
-    changeColor();
-  }
-
-  void removeNutrient(Nutrient nutrient) {
-    this.nutrients.remove(nutrient);
-    revertColor();
-  }
-
+ 
   public void restart() {
     w = initW;
     h = initH;
@@ -147,13 +133,7 @@ abstract class Bacteria {
   }
 
   public void applyNutrients() {
-    if (nutrients.size() > 0) {
-      for (Nutrient nutrient : this.nutrients) {
-        w = w * incrementSize;
-        h = h * incrementSize;
-        nutrient.capacity -= 0.1;
-        trashPercent += 0.05;
-      }
+    if (nutrients > 0) {
       Vec2 pos = box2d.getBodyPixelCoord(body);
       x = pos.x;
       y = pos.y;
@@ -163,6 +143,12 @@ abstract class Bacteria {
     } else {
       energy -= 0.01;
     }
+  }
+
+  public void eat() {
+    w = w * incrementSize;
+    h = h * incrementSize;
+    trashPercent += 0.05;
   }
 
 
