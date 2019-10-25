@@ -42,6 +42,7 @@ class Ecoli extends Bacteria {
     popMatrix();
   }
 
+
  
   //void slowDown() {    
   //  println("------------------------------");
@@ -95,6 +96,7 @@ class Ecoli extends Bacteria {
     super.isDead();
     if (dead)
       this.img.filter(GRAY);
+
   }
 
 
@@ -116,7 +118,6 @@ class Ecoli extends Bacteria {
   }
   public void applyOxygen() {
   }
-
   boolean isReady() {
     return ((100 * w) / initW) >= 150;
   }

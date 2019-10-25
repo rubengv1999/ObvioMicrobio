@@ -102,6 +102,7 @@ abstract class Bacteria {
     createBody();
   }
 
+
   //public abstract void slowDown();
 
   void slowDown() {    
@@ -162,6 +163,8 @@ abstract class Bacteria {
     body.applyForce(force, pos);
   }
 
+
+  
   public void applyNutrients() {
     if (nutrients.size() > 0) {
       for (Nutrient nutrient : this.nutrients) {
@@ -178,6 +181,7 @@ abstract class Bacteria {
       createBody();
     }
   }
+
 
   public boolean generateTrash() {
     if (trashPercent >= 40) {

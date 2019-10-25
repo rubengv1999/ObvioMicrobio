@@ -63,6 +63,7 @@ void draw() {
 
   //Proceso Bacterias
   //Iterator<Bacteria> it = bacterias.iterator();
+
   //while (it.hasNext()){
   for (Bacteria bacteria : bacterias) {
     bacteria.display();
