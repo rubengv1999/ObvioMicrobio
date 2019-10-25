@@ -156,13 +156,14 @@ void initControls() {
 void initText() {
   textSize(35);
   text("Parámetros", 15, 40); 
-  text("Obvio Microbio", width - 265, 40); 
   textSize(10);
   text("Rubén González Villanueva", width  - 150, height- 100); 
   text("José Daniel Gómez Casasola", width  - 150, height- 80); 
   text("José Fabio Hidalgo", width  - 150, height- 60); 
   text("Gerardo Villalobos Villalobos", width  - 150, height- 40); 
   text("Gabriel Vindas Brenes", width  - 150, height- 20);
+  PImage logo = loadImage("images/logo.png");
+  image(logo, width - 210, 35, 174.29, 136);
 }
 
 void beginContact(Contact c) {
