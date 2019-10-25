@@ -2,7 +2,7 @@ class Nutrient {
   float x, y, capacity, size;
   Body body;
   Vec2 speed;
-  
+
 
   Nutrient() {
     float randomX, randomY;
@@ -15,7 +15,7 @@ class Nutrient {
     this.x = randomX;
     this.y = randomY;
     this.capacity = random(100);
-    this.speed = new Vec2(random(-25,25), random(-25,25));
+    this.speed = new Vec2(random(-25, 25), random(-25, 25));
     this.size = (float)Math.sqrt(capacity);
     createBody();
   }
@@ -36,14 +36,14 @@ class Nutrient {
 
     body.createFixture(fixtureDef);
     body.setUserData(this);
-    
+
     Vec2 pos = body.getWorldCenter();
     body.applyForce(speed, pos);
   }
-  
+
 
   void display() {
-    fill(0,capacity);
+    fill(#5BF72D, capacity);
     noStroke();
     rectMode(CENTER);
     Vec2 pos = box2d.getBodyPixelCoord(body);
@@ -54,12 +54,12 @@ class Nutrient {
     ellipse(0, 0, size, size);
     popMatrix();
   }
-  
- boolean isDead() {
-    if (capacity <= 0){
+
+  boolean isDead() {
+    if (capacity <= 0) {
       box2d.destroyBody(body);
       return true;
     }
     return false;
- }
+  }
 }

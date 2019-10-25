@@ -1,6 +1,6 @@
 class Ecoli extends Bacteria {
-  Ecoli(float x, float y, float w, float h) {
-    super(x, y, w, h);
+  Ecoli(float x, float y) {
+    super(x, y, 10, 20);
     this.img = loadImage("images/ecoli.png");
     this.incrementSize = 1.0005;
   }
@@ -42,61 +42,10 @@ class Ecoli extends Bacteria {
     popMatrix();
   }
 
-
- 
-  //void slowDown() {    
-  //  println("------------------------------");
-  //  println("Body Before: " + body.getLinearVelocity().x + " " + body.getLinearVelocity().y);
-  //  println("Vel: " + body.getLinearVelocity().length());
-  //  //float brkPower = 0.7;
-  //  float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
-  //  float brkPower = map(humidity, 0, 0.9, maxSpeed, 0);
-  //  println("Initial Speed Mag: " + maxSpeed);
-  //  println("IS X: " + initialSpeed.x);
-  //  println("IS Y: " + initialSpeed.y);
-  //  println("Humidity: " + humidity);
-  //  println("Break Power: " + brkPower);
-  //  float curSpeed = body.getLinearVelocity().length();
-  //  println("Current Speed: " + curSpeed);
-  //  float newSpeed = curSpeed - brkPower;
-  //  println("New Speed: " + newSpeed);
-  //  if(newSpeed < 0){
-  //    newSpeed = 0;
-  //  }
-  //  Vec2 bodyVel = body.getLinearVelocity();
-  //  bodyVel.normalize();
-  //  println("BodyVel Normalized: " + bodyVel.x + " " + bodyVel.y);
-  //  bodyVel = bodyVel.mul(newSpeed);
-  //  println("BodyVel * Speed: " + bodyVel.x + " " + bodyVel.y);
-  //  body.setLinearVelocity(bodyVel);
-  //  println("Body After: " + body.getLinearVelocity().x + " " + body.getLinearVelocity().y);
-  //  println("Vel: " + body.getLinearVelocity().length());
-  //  println("------------------------------");    
-  //}
-  
-  //void startMoving(){    
-  //  float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
-  //  //println("MaxSpeed: " + maxSpeed + "------------");
-  //  float movPower = 0.005;
-  //  float curSpeed = body.getLinearVelocity().length();
-  //  float newSpeed = curSpeed + movPower;
-  //  if(newSpeed > maxSpeed){
-  //    newSpeed = maxSpeed;
-  //  }
-  //  Vec2 bodyVel = body.getLinearVelocity();    
-  //  if(bodyVel.length() == 0){
-  //    body.setLinearVelocity(new Vec2(random(-0.01, 0.01),random(-0.01,0.01)));
-  //  }
-  //  bodyVel.normalize();
-  //  bodyVel = bodyVel.mul(newSpeed);
-  //  body.setLinearVelocity(bodyVel);                  
-  //}
-
   void isDead() {//Especializar
     super.isDead();
     if (dead)
       this.img.filter(GRAY);
-
   }
 
 
@@ -108,10 +57,9 @@ class Ecoli extends Bacteria {
     }
   }
   public void applyHumidity() {
-    if(humidity < 0.9){
+    if (humidity < 0.9) {
       slowDown();
-    }
-    else{
+    } else {
       startMoving();
       //setRotation();
     }

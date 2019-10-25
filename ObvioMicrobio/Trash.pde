@@ -1,12 +1,12 @@
-class Trash{
+class Trash {
   float x, y;
   Body body;
   Vec2 speed;
-  
+
   Trash(float x, float y) {
     this.x = x;
     this.y = y;
-    this.speed = new Vec2(random(-25,25), random(-25,25));
+    this.speed = new Vec2(random(-25, 25), random(-25, 25));
     createBody();
   }
   void createBody() {
@@ -26,11 +26,11 @@ class Trash{
 
     body.createFixture(fixtureDef);
     body.setUserData(this);
-    
+
     Vec2 pos = body.getWorldCenter();
     body.applyForce(speed, pos);
   }
-  
+
 
   void display() {
     fill(#BC6C04);

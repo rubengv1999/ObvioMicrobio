@@ -35,20 +35,8 @@ void setup() {
   oxygen = true;
   acidity = 7;
   humidity = 0.9;
-  nutrientsProb = 0.1;
+  nutrientsProb = 0.5;
   initControls();
-
-  float randomX, randomY;
-  double distance;
-  for (int i = 0; i < 15; i++) {
-    do {
-      randomX = random(width);
-      randomY = random(height);
-      distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
-    } while (distance >  height / 2 - 20);
-
-    bacterias.add(new Ecoli(randomX, randomY, 15, 30));
-  }
 }
 
 //Draw
@@ -62,9 +50,6 @@ void draw() {
   ArrayList<Bacteria> nuevasBac = new ArrayList();
 
   //Proceso Bacterias
-  //Iterator<Bacteria> it = bacterias.iterator();
-
-  //while (it.hasNext()){
   for (Bacteria bacteria : bacterias) {
     bacteria.display();
     if (! bacteria.dead) {
@@ -73,7 +58,8 @@ void draw() {
       if (! bacteria.dead) {
         if (bacteria.isReady()) {
           bacteria.restart();
-          Bacteria newBac = new Ecoli(bacteria.x, bacteria.y, 15, 30);
+          Bacteria newBac = new Ecoli(bacteria.x, bacteria.y);
+          bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
           newBac.energy = bacteria.energy;
           nuevasBac.add(newBac);
         }
@@ -89,13 +75,8 @@ void draw() {
     bacterias.add(bac);
   }
 
-    
-  //Agregar bacterias
-  //if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
-  //if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
-  //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
-  //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
-  //if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 20, 20));
+
+  
 
   if (random(1) < nutrientsProb && frameCount % 10 == 0) {
     Nutrient nutrient = new Nutrient();
@@ -107,7 +88,7 @@ void draw() {
   while (itN.hasNext()) {
     Nutrient nutrient = itN.next();
     nutrient.display();
-    if (nutrient.isDead()){ 
+    if (nutrient.isDead()) { 
       for (Bacteria bacteria : bacterias)
         if (bacteria.nutrients.contains(nutrient))
           bacteria.removeNutrient(nutrient);
@@ -147,6 +128,10 @@ void initControls() {
     .setValue(true)
     .setMode(ControlP5.SWITCH)
     .setColorLabel(0x00000000);
+  cp5.addButton("reiniciar")
+    .setValue(0)
+    .setPosition(10, height - 35)
+    .setSize(80, 25);
 
 
 
@@ -205,12 +190,35 @@ public void applyContact(Contact c, boolean contact) {
     nutrient = (Nutrient) o1;
     colision = true;
   }
-  if (colision){
-    if (contact){
-      if(humidity>=0.9)bacteria.addNutrient(nutrient);
-    }
-    else{
+  if (colision) {
+    if (contact) {
+      if (humidity>=0.9)bacteria.addNutrient(nutrient);
+    } else {
       bacteria.removeNutrient(nutrient);
     }
   }
 }
+
+public void reiniciar() {
+  bacterias = new ArrayList();
+  nutrients = new ArrayList();
+  waste = new ArrayList();
+  float randomX, randomY;
+  double distance;
+  for (int i = 0; i < 15; i++) {
+    do {
+      randomX = random(width);
+      randomY = random(height);
+      distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
+    } while (distance >  height / 2 - 20);
+
+    bacterias.add(new Ecoli(randomX, randomY));
+  }
+}
+
+//Agregar bacterias
+  //if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
+  //if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
+  //if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
+  //if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
+  //if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 20, 20));

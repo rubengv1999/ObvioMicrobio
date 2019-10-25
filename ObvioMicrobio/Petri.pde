@@ -33,22 +33,19 @@ class Petri {
   }
 
   void display(float level) {
-    stroke(#eaeaea);
-    if(level<0.9){
+    stroke(#bfbdbd);
+    if (level<0.9) {
       strokeWeight(5);      
       colorMode(HSB, 360, 100, 100);     
-      color chumidity = color(map(level,0,1,25,0), map(level,0,1,30,0), 94.5);
+      color chumidity = color(map(level, 0, 1, 25, 0), map(level, 0, 1, 30, 0), 94.5);
       fill(chumidity);
       ellipse(width/2, height/2, radius*2, radius*2);    
       colorMode(RGB, 255, 255, 255);
-    }
-    else{
+    } else {
       strokeWeight(5);
       //stroke(#eaeaea);
       fill(#eaeaea, 200);
       ellipse(width/2, height/2, radius*2, radius*2);
     }
   }
-     
-  
 }

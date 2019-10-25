@@ -39,7 +39,7 @@ class Estafilococo extends Bacteria {
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
-   
+
   public void applyAcidity() {
   }
   public void applyHumidity() {

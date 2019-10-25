@@ -40,7 +40,7 @@ class Tuberculosis extends Bacteria {
     popMatrix();
   }
 
-  void slowDown(){
+  void slowDown() {
   }
   public void applyAcidity() {
   }
