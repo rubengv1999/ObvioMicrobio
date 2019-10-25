@@ -7,6 +7,7 @@ import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.contacts.*;
 //Librerías Java
 import java.util.Iterator;
+import java.lang.Object;
 //Librería ControlP5
 import controlP5.*;
 
@@ -23,6 +24,7 @@ boolean oxygen;
 //Setup
 void setup() {
   fullScreen(P2D);
+  //size(900, 600);
   box2d = new Box2DProcessing(this);
   box2d.createWorld(new Vec2(0, 0));
   box2d.listenForCollisions();
@@ -38,7 +40,7 @@ void setup() {
 
   float randomX, randomY;
   double distance;
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 15; i++) {
     do {
       randomX = random(width);
       randomY = random(height);
@@ -54,18 +56,19 @@ void draw() {
   background(255);
   fill(0);
   initText();
-  petri.display();
+  petri.display(humidity);  
   box2d.step();    
 
   ArrayList<Bacteria> nuevasBac = new ArrayList();
 
   //Proceso Bacterias
   //Iterator<Bacteria> it = bacterias.iterator();
-  //while (it.hasNext()) {
+
+  //while (it.hasNext()){
   for (Bacteria bacteria : bacterias) {
     bacteria.display();
     if (! bacteria.dead) {
-      bacteria.applyAll(); 
+      bacteria.applyAll();//---------
       bacteria.isDead();
       if (! bacteria.dead) {
         if (bacteria.isReady()) {
@@ -86,6 +89,7 @@ void draw() {
     bacterias.add(bac);
   }
 
+    
   //Agregar bacterias
   //if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
   //if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
@@ -98,12 +102,12 @@ void draw() {
     nutrients.add(nutrient);
   }
 
-  //Proceso Bacterias
+  //Proceso Nutrientes
   Iterator<Nutrient> itN = nutrients.iterator();
   while (itN.hasNext()) {
     Nutrient nutrient = itN.next();
     nutrient.display();
-    if (nutrient.isDead()) { 
+    if (nutrient.isDead()){ 
       for (Bacteria bacteria : bacterias)
         if (bacteria.nutrients.contains(nutrient))
           bacteria.removeNutrient(nutrient);
@@ -115,6 +119,9 @@ void draw() {
     trash.display();
   }
 }
+
+
+
 
 void initControls() {
   pushMatrix();
@@ -198,10 +205,12 @@ public void applyContact(Contact c, boolean contact) {
     nutrient = (Nutrient) o1;
     colision = true;
   }
-  if (colision) {
-    if (contact) 
-      bacteria.addNutrient(nutrient);
-    else
+  if (colision){
+    if (contact){
+      if(humidity>=0.9)bacteria.addNutrient(nutrient);
+    }
+    else{
       bacteria.removeNutrient(nutrient);
+    }
   }
 }

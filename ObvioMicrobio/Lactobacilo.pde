@@ -20,6 +20,8 @@ class Lactobacilo extends Bacteria {
     popMatrix();
   }
 
+  void slowDown(){
+  }
   public void applyAcidity() {
   }
   public void applyHumidity() {

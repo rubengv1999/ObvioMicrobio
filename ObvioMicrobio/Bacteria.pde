@@ -1,10 +1,15 @@
 abstract class Bacteria {
   float x, y, w, h, energy, initW, initH, incrementSize, trashPercent;
   Body body;
+  Vec2 speed;
   color c;
   PImage img;
   boolean dead;
   ArrayList<Nutrient> nutrients;
+  float speedRange;
+  Vec2 initialSpeed;
+  float iniVelX;
+  float iniVelY;
 
   Bacteria(float x, float y, float w, float h) {
     this.x = x;
@@ -17,6 +22,11 @@ abstract class Bacteria {
     this.dead = false;
     this.energy = 100;
     this.trashPercent = 0;
+    this.speedRange = 2.5;    
+    iniVelX = random(-speedRange, speedRange);
+    iniVelY = random(-speedRange, speedRange);
+    initialSpeed = new Vec2(iniVelX, iniVelY);
+    this.speed = new Vec2(iniVelX, iniVelY);
     nutrients = new ArrayList();
     createBody();
   }
@@ -35,8 +45,8 @@ abstract class Bacteria {
     fixtureDef.density = 1;
     fixtureDef.friction = 0.3;
     fixtureDef.restitution = 0.5;
-
-    body.createFixture(fixtureDef);
+    //applyForce(speed);
+    body.createFixture(fixtureDef);    
     body.setUserData(this);
   }
 
@@ -91,11 +101,69 @@ abstract class Bacteria {
     box2d.destroyBody(body);
     createBody();
   }
-  
-  void applyForce(Vec2 force){
+
+
+  //public abstract void slowDown();
+
+  void slowDown() {    
+    println("------------------------------");
+    println("Body Before: " + body.getLinearVelocity().x + " " + body.getLinearVelocity().y);
+    println("Vel: " + body.getLinearVelocity().length());
+    //float brkPower = 0.7;
+    float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
+    float brkPower = map(humidity, 0, 0.9, maxSpeed, 0)/150;
+    println("Initial Speed Mag: " + maxSpeed);
+    println("IS X: " + initialSpeed.x);
+    println("IS Y: " + initialSpeed.y);
+    println("Humidity: " + humidity);
+    println("Break Power: " + brkPower);
+    float curSpeed = body.getLinearVelocity().length();
+    println("Current Speed: " + curSpeed);
+    float newSpeed = curSpeed - brkPower;
+    println("New Speed: " + newSpeed);
+    if (newSpeed < 0) {
+      newSpeed = 0;
+      body.setAngularVelocity(0);
+    }
+    Vec2 bodyVel = body.getLinearVelocity();
+    bodyVel.normalize();
+    println("BodyVel Normalized: " + bodyVel.x + " " + bodyVel.y);
+    bodyVel = bodyVel.mul(newSpeed);
+    println("BodyVel * Speed: " + bodyVel.x + " " + bodyVel.y);
+    body.setLinearVelocity(bodyVel);
+    println("Body After: " + body.getLinearVelocity().x + " " + body.getLinearVelocity().y);
+    println("Vel: " + body.getLinearVelocity().length());
+    println("------------------------------");
+  }
+
+  void startMoving() {    
+    float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
+    //println("MaxSpeed: " + maxSpeed + "------------");
+    float movPower = 0.005;
+    float curSpeed = body.getLinearVelocity().length();
+    float newSpeed = curSpeed + movPower;
+    if (newSpeed > maxSpeed) {
+      newSpeed = maxSpeed;      
+    }
+    Vec2 bodyVel = body.getLinearVelocity();    
+    if (bodyVel.length() == 0) {
+      body.setLinearVelocity(new Vec2(random(-0.01, 0.01), random(-0.01, 0.01)));
+    }
+    bodyVel.normalize();
+    bodyVel = bodyVel.mul(newSpeed);
+    body.setLinearVelocity(bodyVel);
+  }
+
+  void setRotation(){
+    body.setAngularVelocity(random(-PI, PI)/50);
+  }  
+
+  void applyForce(Vec2 force) {//forces in meters
     Vec2 pos = body.getWorldCenter();
     body.applyForce(force, pos);
   }
+
+
   
   public void applyNutrients() {
     if (nutrients.size() > 0) {
@@ -113,16 +181,16 @@ abstract class Bacteria {
       createBody();
     }
   }
-  
-  public boolean generateTrash(){
-    if (trashPercent >= 40){
+
+
+  public boolean generateTrash() {
+    if (trashPercent >= 40) {
       trashPercent = 0;
       return true;
-    }
-    else
+    } else
       return false;
   }
-  
+
   public abstract void applyAcidity(); 
   public abstract void applyHumidity();
   public abstract void applyOxygen();
