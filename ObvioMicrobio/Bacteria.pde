@@ -22,7 +22,7 @@ abstract class Bacteria {
     this.dead = false;
     this.energy = 100;
     this.trashPercent = 0;
-    this.speedRange = 0.75;    
+    this.speedRange = 5.75;    
     iniVelX = random(-speedRange, speedRange);
     iniVelY = random(-speedRange, speedRange);
     initialSpeed = new Vec2(iniVelX, iniVelY);
@@ -94,6 +94,21 @@ abstract class Bacteria {
   void slowDown() {    
     float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
     float brkPower = map(humidity, 0, 0.9, maxSpeed, 0)/150;
+    float curSpeed = body.getLinearVelocity().length();
+    float newSpeed = curSpeed - brkPower;
+    if (newSpeed < 0) {
+      newSpeed = 0;
+      body.setAngularVelocity(0);
+    }
+    Vec2 bodyVel = body.getLinearVelocity();
+    bodyVel.normalize();
+    bodyVel = bodyVel.mul(newSpeed);
+    body.setLinearVelocity(bodyVel);
+  }
+  
+  void stopDownOx() {    
+    float maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
+    float brkPower = map(-1, 0, 0.01, maxSpeed, 0)/150;
     float curSpeed = body.getLinearVelocity().length();
     float newSpeed = curSpeed - brkPower;
     if (newSpeed < 0) {

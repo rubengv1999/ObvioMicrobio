@@ -65,6 +65,14 @@ class Ecoli extends Bacteria {
     }
   }
   public void applyOxygen() {
+    if (oxygen == false)
+    {
+      stopDownOx();         
+    }
+    else
+    {
+       startMoving();   
+    }
   }
 
   boolean isReady() {

@@ -45,6 +45,14 @@ class Estafilococo extends Bacteria {
   public void applyHumidity() {
   }
   public void applyOxygen() {
+    if (oxygen == false)
+    {
+       stopDownOx(); 
+    }
+    else
+    {
+        startMoving();
+    }
   }
   public void applyNutrients() {
   }

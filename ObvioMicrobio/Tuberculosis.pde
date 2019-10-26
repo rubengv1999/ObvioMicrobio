@@ -47,6 +47,15 @@ class Tuberculosis extends Bacteria {
   public void applyHumidity() {
   }
   public void applyOxygen() {
+    
+    if (oxygen == false)
+    {
+       dead = true; 
+    }
+    else 
+    {
+       dead = false; 
+    }
   }
   public void applyNutrients() {
   }
