@@ -69,8 +69,10 @@ class Nutrient {
 
   void aliment() {
     for (Bacteria bacteria : eaters) {
-      bacteria.eat();
-      capacity -= 0.1;
+      if (!bacteria.dead) {
+        bacteria.eat();
+        capacity -= 0.1;
+      }
     }
   }
 
