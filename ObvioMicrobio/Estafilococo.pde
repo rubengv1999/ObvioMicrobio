@@ -1,6 +1,6 @@
 class Estafilococo extends Bacteria {
-  Estafilococo(float x, float y, float w, float h) {
-    super(x, y, w, h);
+  Estafilococo(float x, float y) {
+    super(x, y, 20, 18);
     this.img = loadImage("images/estafilococo.png");
     this.incrementSize = 1.0; //especializar
   }

@@ -1,6 +1,6 @@
 class Clostridium extends Bacteria {
-  Clostridium(float x, float y, float w, float h) {
-    super(x, y, w, h);
+  Clostridium(float x, float y) {
+    super(x, y, 13, 13);
     this.img = loadImage("images/clostridium.png");
     this.incrementSize = 1.0; //especializar
   }

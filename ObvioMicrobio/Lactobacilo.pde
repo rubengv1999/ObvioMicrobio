@@ -1,6 +1,6 @@
 class Lactobacilo extends Bacteria {
-  Lactobacilo(float x, float y, float w, float h) {
-    super(x, y, w, h);
+  Lactobacilo(float x, float y) {
+    super(x, y, 13, 13);
     this.img = loadImage("images/lactobacillus.png");
     this.incrementSize = 1.0; //especializar
   }

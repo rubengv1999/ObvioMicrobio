@@ -21,6 +21,7 @@ ControlP5 cp5;
 float acidity, humidity, nutrientsProb;
 boolean oxygen;
 int deathBacterias;
+int bacteriaType = 0;
 
 //Setup
 void setup() {
@@ -59,7 +60,7 @@ void draw() {
       if (! bacteria.dead) {
         if (bacteria.isReady()) {
           bacteria.restart();
-          Bacteria newBac = new Ecoli(bacteria.x, bacteria.y);
+          Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
           bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
           newBac.energy = bacteria.energy;
           nuevasBac.add(newBac);
@@ -131,12 +132,8 @@ void initControls() {
     .setValue(0)
     .setPosition(10, height - 35)
     .setSize(100, 25);
-
-
-
-
-  /*  cp5.addDropdownList("Bacteria")
-   .setPosition(10, 60)
+  cp5.addDropdownList("Bacteria")
+   .setPosition(10, 190)
    .setBackgroundColor(color(0, 45, 90))
    .setItemHeight(20)
    .setBarHeight(20)
@@ -149,7 +146,6 @@ void initControls() {
    .addItem("Clostridium perfringens", 3)
    .addItem("Estafilococo dorado", 4)
    .addItem("Mycobacterium tuberculosis", 5);
-   */
   popMatrix();
 }
 void initText() {
@@ -214,7 +210,38 @@ public void reiniciar() {
       distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
     } while (distance >  height / 2 - 20);
 
-    bacterias.add(new Ecoli(randomX, randomY));
+    bacterias.add(crearBacteria(randomX, randomY));
+  }
+  
+}
+
+Bacteria crearBacteria(float x, float y) {
+  Bacteria bact = new Ecoli(0, 0); 
+  switch (bacteriaType) {
+  case 0:
+    bact = new Ecoli(x, y);
+    break;
+  case 1:
+    bact = new Lactobacilo(x, y);
+    break;
+  case 2:
+    bact = new Clostridium(x, y);
+    break;
+  case 3:
+    bact = new Estafilococo(x, y);
+    break;
+  case 4:
+    bact = new Tuberculosis(x, y);
+    break;
+  }
+  return bact;
+}
+
+void controlEvent(ControlEvent theEvent) {
+  if (theEvent.isController()) {
+    if (theEvent.getController().toString().equals("Bacteria [DropdownList]"))
+      bacteriaType = (int)theEvent.getController().getValue();
+      reiniciar();
   }
 }
 
