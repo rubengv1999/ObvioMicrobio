@@ -92,13 +92,11 @@ abstract class Bacteria {
     float movPower = 0.005;
     float curSpeed = body.getLinearVelocity().length();
     float newSpeed = curSpeed + movPower;
-    if (newSpeed > maxSpeed) {
+    if (newSpeed > maxSpeed) 
       newSpeed = maxSpeed;
-    }
     Vec2 bodyVel = body.getLinearVelocity();    
-    if (bodyVel.length() == 0) {
+    if (bodyVel.length() == 0) 
       body.setLinearVelocity(new Vec2(random(-0.01, 0.01), random(-0.01, 0.01)));
-    }
     bodyVel.normalize();
     bodyVel = bodyVel.mul(newSpeed);
     body.setLinearVelocity(bodyVel);
