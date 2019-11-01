@@ -26,7 +26,6 @@ int bacteriaType = 0;
 //Setup
 void setup() {
   fullScreen(P2D);
-  //size(900, 600);
   box2d = new Box2DProcessing(this);
   box2d.createWorld(new Vec2(0, 0));
   box2d.listenForCollisions();
