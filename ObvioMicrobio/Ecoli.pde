@@ -19,20 +19,8 @@ class Ecoli extends SquareBacteria {
     popMatrix();
   }
 
-  void isDead() {//Especializar
-    super.isDead();
-    if (dead)
-      this.img.filter(GRAY);
-  }
 
-
-  public void applyAcidity() {
-    if (acidity > 9 || acidity < 5) {
-      energy -= 1;
-    } else if (acidity > 10 || acidity < 3) {
-      energy -= 5;
-    }
-  }
+ 
   
   public void applyOxygen() {
   }

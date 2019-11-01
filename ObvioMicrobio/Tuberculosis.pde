@@ -3,6 +3,7 @@ class Tuberculosis extends SquareBacteria {
     super(x, y, 13, 13);
     this.img = loadImage("images/tuberculosis.png");
     this.incrementSize = 1.0; //especializar
+    this.acidityPerfect = 6.6;
   }
 
   void createBody() {
@@ -42,13 +43,8 @@ class Tuberculosis extends SquareBacteria {
 
   void slowDown() {
   }
-  public void applyAcidity() {
-  }
-  public void applyHumidity() {
-  }
-  public void applyOxygen() {
-  }
-  public void applyNutrients() {
+ public void applyOxygen() {
+   if (!oxygen) energy--;
   }
   boolean isReady() {
     return false;

@@ -20,15 +20,7 @@ class Lactobacilo extends CircularBacteria {
     popMatrix();
   }
 
-  void slowDown() {
-  }
-  public void applyAcidity() {
-  }
-  public void applyHumidity() {
-  }
   public void applyOxygen() {
-  }
-  public void applyNutrients() {
   }
   boolean isReady() {
     return false;

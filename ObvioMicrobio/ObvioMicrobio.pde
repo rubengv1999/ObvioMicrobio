@@ -49,8 +49,8 @@ void draw() {
   //Proceso Bacterias
   for (Bacteria bacteria : bacterias) {
     bacteria.display();
-    if (! bacteria.dead) {
-      bacteria.applyAll();//---------
+    if (!bacteria.dead) {
+      bacteria.applyAll();
       bacteria.isDead();
       if (! bacteria.dead) {
         if (bacteria.isReady()) {

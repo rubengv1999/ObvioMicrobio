@@ -40,13 +40,15 @@ class Estafilococo extends SquareBacteria {
     popMatrix();
   }
 
-  public void applyAcidity() {
-  }
-  public void applyHumidity() {
-  }
-  public void applyOxygen() {
-  }
-  public void applyNutrients() {
+ public void applyOxygen() {
+    if (oxygen == false)
+    {
+      stopDownOx();         
+    }
+    else
+    {
+       startMoving();   
+    }
   }
   boolean isReady() {
     return false;

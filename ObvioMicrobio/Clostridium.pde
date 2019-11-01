@@ -20,13 +20,15 @@ class Clostridium extends CircularBacteria {
     popMatrix();
   }
 
-  public void applyAcidity() {
-  }
-  public void applyHumidity() {
-  }
   public void applyOxygen() {
-  }
-  public void applyNutrients() {
+    if (oxygen == false)
+    {
+      stopDownOx();         
+    }
+    else
+    {
+       startMoving();   
+    }
   }
 
   boolean isReady() {
