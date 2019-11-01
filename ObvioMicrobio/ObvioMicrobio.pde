@@ -35,9 +35,6 @@ void setup() {
   nutrients = new ArrayList();
   waste = new ArrayList();
   oxygen = true;
-  acidity = 7;
-  humidity = 0.9;
-  nutrientsProb = 0.5;
   initControls();
 }
 
@@ -48,9 +45,7 @@ void draw() {
   initText();
   petri.display(humidity);  
   box2d.step();    
-
   ArrayList<Bacteria> nuevasBac = new ArrayList();
-
   //Proceso Bacterias
   for (Bacteria bacteria : bacterias) {
     bacteria.display();
@@ -77,9 +72,6 @@ void draw() {
     bacterias.add(bac);
   }
 
-
-
-
   if (random(1) < nutrientsProb && frameCount % 10 == 0) {
     Nutrient nutrient = new Nutrient();
     nutrients.add(nutrient);
@@ -91,20 +83,15 @@ void draw() {
     Nutrient nutrient = itN.next();
     nutrient.display();
     nutrient.aliment();
-    if (nutrient.isDead()) { 
+    if (nutrient.isDead()) 
       itN.remove();
-    }
   }
-
-  for (Trash trash : waste) {
+  for (Trash trash : waste) 
     trash.display();
-  }
 }
 
-
-
-
 void initControls() {
+  cargarValores();
   pushMatrix();
   cp5 = new ControlP5(this);
   cp5.addSlider("acidity")
@@ -133,19 +120,19 @@ void initControls() {
     .setPosition(10, height - 35)
     .setSize(100, 25);
   cp5.addDropdownList("Bacteria")
-   .setPosition(10, 190)
-   .setBackgroundColor(color(0, 45, 90))
-   .setItemHeight(20)
-   .setBarHeight(20)
-   .setWidth(200)
-   .setHeight(120)
-   .setColorBackground(color(0, 45, 90))
-   .setColorActive(color(255, 128))
-   .addItem("Escherichia coli", 1)
-   .addItem("Lactobacilos", 2)
-   .addItem("Clostridium perfringens", 3)
-   .addItem("Estafilococo dorado", 4)
-   .addItem("Mycobacterium tuberculosis", 5);
+    .setPosition(10, 190)
+    .setBackgroundColor(color(0, 45, 90))
+    .setItemHeight(20)
+    .setBarHeight(20)
+    .setWidth(200)
+    .setHeight(120)
+    .setColorBackground(color(0, 45, 90))
+    .setColorActive(color(255, 128))
+    .addItem("Escherichia coli", 1)
+    .addItem("Lactobacilos", 2)
+    .addItem("Clostridium perfringens", 3)
+    .addItem("Estafilococo dorado", 4)
+    .addItem("Mycobacterium tuberculosis", 5);
   popMatrix();
 }
 void initText() {
@@ -170,7 +157,6 @@ void beginContact(Contact c) {
 }
 
 void endContact(Contact c) {
-
   applyContact(c, false);
 }
 
@@ -187,7 +173,7 @@ public void applyContact(Contact c, boolean contact) {
     bacteria = (Bacteria) o2;
     nutrient = (Nutrient) o1;
   }
-  if (bacteria != null) {
+  if (nutrient != null) {
     if (contact) {
       if (humidity>=0.9)nutrient.addBacteria(bacteria);
     } else {
@@ -197,6 +183,7 @@ public void applyContact(Contact c, boolean contact) {
 }
 
 public void reiniciar() {
+  cargarValores();
   deathBacterias = 0;
   bacterias = new ArrayList();
   nutrients = new ArrayList();
@@ -209,10 +196,14 @@ public void reiniciar() {
       randomY = random(height);
       distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
     } while (distance >  height / 2 - 20);
-
     bacterias.add(crearBacteria(randomX, randomY));
   }
-  
+}
+
+public void cargarValores() {
+  humidity = 0.9;
+  acidity = bacteriaType == 1? 6.6 :7;
+  nutrientsProb = 0.5;
 }
 
 Bacteria crearBacteria(float x, float y) {
@@ -238,16 +229,10 @@ Bacteria crearBacteria(float x, float y) {
 }
 
 void controlEvent(ControlEvent theEvent) {
-  if (theEvent.isController()) {
-    if (theEvent.getController().toString().equals("Bacteria [DropdownList]"))
+  if (theEvent.isController()) 
+    if (theEvent.getController().toString().equals("Bacteria [DropdownList]")) {
       bacteriaType = (int)theEvent.getController().getValue();
       reiniciar();
-  }
+      initControls();
+    }
 }
-
-//Agregar bacterias
-//if (mousePressed) bacterias.add(new Ecoli(mouseX, mouseY, 15, 30));
-//if (mousePressed) bacterias.add(new Lactobacilo(mouseX, mouseY, 20, 20));
-//if (mousePressed) bacterias.add(new Clostridium(mouseX, mouseY, 20, 20));
-//if (mousePressed) bacterias.add(new Estafilococo(mouseX, mouseY, 30, 26));
-//if (mousePressed) bacterias.add(new Tuberculosis(mouseX, mouseY, 20, 20));
