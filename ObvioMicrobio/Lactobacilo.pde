@@ -6,7 +6,6 @@ class Lactobacilo extends CircularBacteria {
   }
 
   void display() {
-    //fill(c);
     noFill();
     noStroke();
     rectMode(CENTER);
@@ -15,14 +14,10 @@ class Lactobacilo extends CircularBacteria {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(-ang);
-    //ellipse(0, 0, w, w);
     image(img, -(w/2), -(w/2), w, w);
     popMatrix();
   }
 
   public void applyOxygen() {
-  }
-  boolean isReady() {
-    return false;
   }
 }

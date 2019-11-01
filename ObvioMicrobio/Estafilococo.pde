@@ -26,7 +26,6 @@ class Estafilococo extends SquareBacteria {
   }
 
   void display() {
-    //fill(c);
     noFill();
     noStroke();
     rectMode(CENTER);
@@ -35,22 +34,17 @@ class Estafilococo extends SquareBacteria {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(-ang);
-    rect(0, 0, w, h);
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
 
- public void applyOxygen() {
-    if (oxygen == false)
+  public void applyOxygen() {
+    if (oxygen)
     {
-      stopDownOx();         
-    }
-    else
+      startMoving();
+    } else
     {
-       startMoving();   
+      stopDownOx();
     }
-  }
-  boolean isReady() {
-    return false;
   }
 }

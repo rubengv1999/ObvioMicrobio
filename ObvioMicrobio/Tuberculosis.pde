@@ -27,7 +27,6 @@ class Tuberculosis extends SquareBacteria {
   }
 
   void display() {
-    //fill(c);
     noFill();
     noStroke();
     rectMode(CENTER);
@@ -36,17 +35,11 @@ class Tuberculosis extends SquareBacteria {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(-ang);
-    rect(0, 0, w, h);
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
 
-  void slowDown() {
-  }
- public void applyOxygen() {
-   if (!oxygen) energy--;
-  }
-  boolean isReady() {
-    return false;
+  public void applyOxygen() {
+    if (!oxygen) energy--;
   }
 }

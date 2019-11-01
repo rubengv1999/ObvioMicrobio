@@ -14,18 +14,10 @@ class Ecoli extends SquareBacteria {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(-ang);
-    rect(0, 0, w, h);
     image(img, -(w/2), -(h/2), w, h);
     popMatrix();
   }
 
-
- 
-  
   public void applyOxygen() {
-  }
-
-  boolean isReady() {
-    return ((100 * w) / initW) >= 150;
   }
 }

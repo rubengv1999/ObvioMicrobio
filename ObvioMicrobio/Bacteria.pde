@@ -2,7 +2,6 @@ abstract class Bacteria {
   float x, y, w, h, energy, initW, initH, incrementSize, trashPercent;
   Body body;
   Vec2 speed;
-  color c;
   PImage img;
   boolean dead;
   int nutrients;
@@ -19,7 +18,6 @@ abstract class Bacteria {
     this.h = h;
     this.initW = w;
     this.initH = h;
-    this.c = color(#FFFFFF);
     this.dead = false;
     this.energy = 100;
     this.trashPercent = 0;
@@ -31,21 +29,6 @@ abstract class Bacteria {
     this.speed = new Vec2(iniVelX, iniVelY);
     nutrients = 0;
     createBody();
-  }
-
-  abstract void createBody();
-
-  void display() {
-    fill(c);
-    noStroke();
-    rectMode(CENTER);
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    float ang = body.getAngle();
-    pushMatrix();
-    translate(pos.x, pos.y);
-    rotate(-ang);
-    ellipse(0, 0, w, w);
-    popMatrix();
   }
 
   public void applyAll() {
@@ -154,8 +137,8 @@ abstract class Bacteria {
     if (trashPercent >= 40) {
       trashPercent = 0;
       return true;
-    } else
-      return false;
+    }
+    return false;
   }
 
   public void applyAcidity() {
@@ -174,6 +157,10 @@ abstract class Bacteria {
     }
   }
 
+  boolean isReady() {
+    return ((100 * w) / initW) >= 150;
+  }
+  abstract void display();
+  abstract void createBody();
   public abstract void applyOxygen();
-  abstract boolean isReady();
 }

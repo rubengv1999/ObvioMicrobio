@@ -6,7 +6,6 @@ class Clostridium extends CircularBacteria {
   }
 
   void display() {
-    //fill(c);
     noFill();
     noStroke();
     rectMode(CENTER);
@@ -15,23 +14,17 @@ class Clostridium extends CircularBacteria {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(-ang);
-    //ellipse(0, 0, w, w);
     image(img, -(w/2), -(w/2), w, w);
     popMatrix();
   }
 
   public void applyOxygen() {
-    if (oxygen == false)
+    if (oxygen)
     {
-      stopDownOx();         
-    }
-    else
+      startMoving();
+    } else
     {
-       startMoving();   
+      stopDownOx();
     }
-  }
-
-  boolean isReady() {
-    return false;
   }
 }

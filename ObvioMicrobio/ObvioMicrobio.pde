@@ -52,7 +52,7 @@ void draw() {
     if (!bacteria.dead) {
       bacteria.applyAll();
       bacteria.isDead();
-      if (! bacteria.dead) {
+      if (!bacteria.dead) {
         if (bacteria.isReady()) {
           bacteria.restart();
           Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
@@ -60,22 +60,17 @@ void draw() {
           newBac.energy = bacteria.energy;
           nuevasBac.add(newBac);
         }
-        if (bacteria.generateTrash()) {
-          Trash basura = new Trash(bacteria.x, bacteria.y);
-          waste.add(basura);
-        }
+        if (bacteria.generateTrash()) 
+          waste.add(new Trash(bacteria.x, bacteria.y));
       }
     }
   }
 
-  for (Bacteria bac : nuevasBac) {
+  for (Bacteria bac : nuevasBac) 
     bacterias.add(bac);
-  }
 
-  if (random(1) < nutrientsProb && frameCount % 10 == 0) {
-    Nutrient nutrient = new Nutrient();
-    nutrients.add(nutrient);
-  }
+  if (random(1) < nutrientsProb && frameCount % 10 == 0) 
+    nutrients.add( new Nutrient());
 
   //Proceso Nutrientes
   Iterator<Nutrient> itN = nutrients.iterator();
@@ -86,6 +81,7 @@ void draw() {
     if (nutrient.isDead()) 
       itN.remove();
   }
+
   for (Trash trash : waste) 
     trash.display();
 }
@@ -204,6 +200,7 @@ public void cargarValores() {
   humidity = 0.9;
   acidity = bacteriaType == 1? 6.6 :7;
   nutrientsProb = 0.5;
+  oxygen = true;
 }
 
 Bacteria crearBacteria(float x, float y) {
