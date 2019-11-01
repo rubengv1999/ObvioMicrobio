@@ -142,9 +142,17 @@ abstract class Bacteria {
     } else
       return false;
   }
+  
+  public void applyHumidity() {
+    if (humidity < 0.9) {
+      slowDown();
+    } else {
+      startMoving();
+      //setRotation();
+    }
+  }
 
   public abstract void applyAcidity(); 
-  public abstract void applyHumidity();
   public abstract void applyOxygen();
   abstract boolean isReady();
 }

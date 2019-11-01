@@ -33,14 +33,7 @@ class Ecoli extends SquareBacteria {
       energy -= 5;
     }
   }
-  public void applyHumidity() {
-    if (humidity < 0.9) {
-      slowDown();
-    } else {
-      startMoving();
-      //setRotation();
-    }
-  }
+  
   public void applyOxygen() {
   }
 
