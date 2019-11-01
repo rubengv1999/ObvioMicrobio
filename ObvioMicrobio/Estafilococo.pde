@@ -1,4 +1,4 @@
-class Estafilococo extends Bacteria {
+class Estafilococo extends SquareBacteria {
   Estafilococo(float x, float y) {
     super(x, y, 20, 18);
     this.img = loadImage("images/estafilococo.png");

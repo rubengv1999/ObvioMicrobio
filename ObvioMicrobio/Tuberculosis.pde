@@ -1,4 +1,4 @@
-class Tuberculosis extends Bacteria {
+class Tuberculosis extends SquareBacteria {
   Tuberculosis(float x, float y) {
     super(x, y, 13, 13);
     this.img = loadImage("images/tuberculosis.png");
