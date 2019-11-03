@@ -1,8 +1,3 @@
-import peasy.*;
-
-PeasyCam cam;
-
-
 //Librerías Box2d
 import shiffman.box2d.*;
 import org.jbox2d.dynamics.*;
