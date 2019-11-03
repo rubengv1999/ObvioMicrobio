@@ -28,12 +28,11 @@ boolean oxygen;
 int deathBacterias;
 int bacteriaType = 0;
 boolean inicio = true;
+float imageWidth;
 
 //Setup
 void setup() {
-
   fullScreen(P3D);
-  cam = new PeasyCam(this, width/2, height/2, width/2, 2000);
   box2d = new Box2DProcessing(this);
   box2d.createWorld(new Vec2(0, 0));
   box2d.listenForCollisions();
@@ -43,64 +42,65 @@ void setup() {
   waste = new ArrayList();
   oxygen = true;
   initControls();
+  imageWidth = width * 1.5;
 }
 
 //Draw
 void draw() {
   background(255);
   fill(0);
-  if (inicio) {
-    pushMatrix();
-    translate(0, 0, 500);
-    PImage logo = loadImage("images/logo.png");
-    imageMode(CENTER);
-    image(logo, width/2, height/2, width * 3, height * 3);
-    popMatrix();
-  } 
-
-
   initText();
-  petri.display(humidity);  
-  box2d.step();    
-  ArrayList<Bacteria> nuevasBac = new ArrayList();
-  //Proceso Bacterias
-  for (Bacteria bacteria : bacterias) {
-    bacteria.display();
-    if (!bacteria.dead) {
-      bacteria.applyAll();
-      bacteria.isDead();
+  if (inicio) {
+    PImage logo = loadImage("images/logo.png");
+    image(logo, width, 0, width, height);
+    while (imageWidth > width * 0.5) {
+      camera(imageWidth, height * 0.5, (height/2.0) / tan(PI*30.0 / 180.0), imageWidth, height * 0.5, 0, 0, 1, 0);
+      imageWidth--;
+    }
+  } else {
+
+    petri.display(humidity);  
+    box2d.step();    
+    ArrayList<Bacteria> nuevasBac = new ArrayList();
+    //Proceso Bacterias
+    for (Bacteria bacteria : bacterias) {
+      bacteria.display();
       if (!bacteria.dead) {
-        if (bacteria.isReady()) {
-          bacteria.restart();
-          Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
-          bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
-          newBac.energy = bacteria.energy;
-          nuevasBac.add(newBac);
+        bacteria.applyAll();
+        bacteria.isDead();
+        if (!bacteria.dead) {
+          if (bacteria.isReady()) {
+            bacteria.restart();
+            Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
+            bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
+            newBac.energy = bacteria.energy;
+            nuevasBac.add(newBac);
+          }
+          if (bacteria.generateTrash()) 
+            waste.add(new Trash(bacteria.x, bacteria.y));
         }
-        if (bacteria.generateTrash()) 
-          waste.add(new Trash(bacteria.x, bacteria.y));
       }
     }
+
+    for (Bacteria bac : nuevasBac) 
+      bacterias.add(bac);
+
+    if (random(1) < nutrientsProb && frameCount % 10 == 0) 
+      nutrients.add( new Nutrient());
+
+    //Proceso Nutrientes
+    Iterator<Nutrient> itN = nutrients.iterator();
+    while (itN.hasNext()) {
+      Nutrient nutrient = itN.next();
+      nutrient.display();
+      nutrient.aliment();
+      if (nutrient.isDead()) 
+        itN.remove();
+    }
+
+    for (Trash trash : waste) 
+      trash.display();
   }
-
-  for (Bacteria bac : nuevasBac) 
-    bacterias.add(bac);
-
-  if (random(1) < nutrientsProb && frameCount % 10 == 0) 
-    nutrients.add( new Nutrient());
-
-  //Proceso Nutrientes
-  Iterator<Nutrient> itN = nutrients.iterator();
-  while (itN.hasNext()) {
-    Nutrient nutrient = itN.next();
-    nutrient.display();
-    nutrient.aliment();
-    if (nutrient.isDead()) 
-      itN.remove();
-  }
-
-  for (Trash trash : waste) 
-    trash.display();
 }
 
 void initControls() {
@@ -146,17 +146,15 @@ void initControls() {
     .addItem("Lactobacilos", 2)
     .addItem("Clostridium perfringens", 3)
     .addItem("Estafilococo dorado", 4)
-    .addItem("Mycobacterium tuberculosis", 5)
-    .setFont(new ControlFont(createFont("Lucida Sans", 11)));
+    .addItem("Mycobacterium tuberculosis", 5);
   popMatrix();
 }
 
 void keyPressed() {
   if (key == ' ') {
-    inicio = false;
-    cam.lookAt(width/2, height/2, width/2, 1.0, 1000);
-    cam.setActive(false);
+    camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
     reiniciar();
+    inicio = false;
   }
 }
 
@@ -168,13 +166,13 @@ void initText() {
   text("Death bacterias: " + deathBacterias, 10, height - 100); 
   text("Nutrients: " + nutrients.size(), 10, height - 75); 
   text("Waste: " + waste.size(), 10, height - 50); 
-  text("Ruben Gonzalez Villanueva", width  - 150, height- 100); 
-  text("Jose Daniel Gomez Casasola", width  - 150, height- 80); 
-  text("Jose Fabio Hidalgo", width  - 150, height- 60); 
-  text("Gerardo Villalobos Villalobos", width  - 150, height- 40); 
-  text("Gabriel Vindas Brenes", width  - 150, height- 20);
+  text("Ruben Gonzalez Villanueva", width  - 180, height- 100); 
+  text("Jose Daniel Gomez Casasola", width  - 180, height- 80); 
+  text("Jose Fabio Hidalgo", width  - 180, height- 60); 
+  text("Gerardo Villalobos Villalobos", width  - 180, height- 40); 
+  text("Gabriel Vindas Brenes", width  - 180, height- 20);
   PImage logo = loadImage("images/logo.png");
-  image(logo, width - 70, 60, 174.29, 136);
+  image(logo, width - 200, 20, 174.29, 136);
 }
 
 void beginContact(Contact c) {
@@ -223,9 +221,6 @@ public void reiniciar() {
     } while (distance >  height / 2 - 20);
     bacterias.add(crearBacteria(randomX, randomY));
   }
-}
-
-public void iniciar() {
 }
 
 public void cargarValores() {
