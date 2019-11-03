@@ -1,3 +1,8 @@
+import peasy.*;
+
+PeasyCam cam;
+
+
 //Librerías Box2d
 import shiffman.box2d.*;
 import org.jbox2d.dynamics.*;
@@ -22,10 +27,13 @@ float acidity, humidity, nutrientsProb;
 boolean oxygen;
 int deathBacterias;
 int bacteriaType = 0;
+boolean inicio = true;
 
 //Setup
 void setup() {
-  fullScreen(P2D);
+
+  fullScreen(P3D);
+  cam = new PeasyCam(this, width/2, height/2, width/2, 2000);
   box2d = new Box2DProcessing(this);
   box2d.createWorld(new Vec2(0, 0));
   box2d.listenForCollisions();
@@ -41,6 +49,16 @@ void setup() {
 void draw() {
   background(255);
   fill(0);
+  if (inicio) {
+    pushMatrix();
+    translate(0, 0, 500);
+    PImage logo = loadImage("images/logo.png");
+    imageMode(CENTER);
+    image(logo, width/2, height/2, width * 3, height * 3);
+    popMatrix();
+  } 
+
+
   initText();
   petri.display(humidity);  
   box2d.step();    
@@ -114,37 +132,49 @@ void initControls() {
     .setValue(0)
     .setPosition(10, height - 35)
     .setSize(100, 25);
+
   cp5.addDropdownList("Bacteria")
     .setPosition(10, 190)
     .setBackgroundColor(color(0, 45, 90))
-    .setItemHeight(20)
+    .setItemHeight(25)
     .setBarHeight(20)
     .setWidth(200)
-    .setHeight(120)
+    .setHeight(150)
     .setColorBackground(color(0, 45, 90))
     .setColorActive(color(255, 128))
     .addItem("Escherichia coli", 1)
     .addItem("Lactobacilos", 2)
     .addItem("Clostridium perfringens", 3)
     .addItem("Estafilococo dorado", 4)
-    .addItem("Mycobacterium tuberculosis", 5);
+    .addItem("Mycobacterium tuberculosis", 5)
+    .setFont(new ControlFont(createFont("Lucida Sans", 11)));
   popMatrix();
 }
+
+void keyPressed() {
+  if (key == ' ') {
+    inicio = false;
+    cam.lookAt(width/2, height/2, width/2, 1.0, 1000);
+    cam.setActive(false);
+    reiniciar();
+  }
+}
+
 void initText() {
   textSize(35);
-  text("Parámetros", 15, 40); 
-  textSize(10);
-  text("Bacterias Vivas: " + (bacterias.size() - deathBacterias), 10, height - 125); 
-  text("Bacterias Muertas: " + deathBacterias, 10, height - 100); 
-  text("Nutrientes: " + nutrients.size(), 10, height - 75); 
-  text("Desechos: " + waste.size(), 10, height - 50); 
-  text("Rubén González Villanueva", width  - 150, height- 100); 
-  text("José Daniel Gómez Casasola", width  - 150, height- 80); 
-  text("José Fabio Hidalgo", width  - 150, height- 60); 
+  text("Parameters", 15, 40); 
+  textSize(12);
+  text("Alive Bacterias: " + (bacterias.size() - deathBacterias), 10, height - 125); 
+  text("Death bacterias: " + deathBacterias, 10, height - 100); 
+  text("Nutrients: " + nutrients.size(), 10, height - 75); 
+  text("Waste: " + waste.size(), 10, height - 50); 
+  text("Ruben Gonzalez Villanueva", width  - 150, height- 100); 
+  text("Jose Daniel Gomez Casasola", width  - 150, height- 80); 
+  text("Jose Fabio Hidalgo", width  - 150, height- 60); 
   text("Gerardo Villalobos Villalobos", width  - 150, height- 40); 
   text("Gabriel Vindas Brenes", width  - 150, height- 20);
   PImage logo = loadImage("images/logo.png");
-  image(logo, width - 210, 35, 174.29, 136);
+  image(logo, width - 70, 60, 174.29, 136);
 }
 
 void beginContact(Contact c) {
@@ -193,6 +223,9 @@ public void reiniciar() {
     } while (distance >  height / 2 - 20);
     bacterias.add(crearBacteria(randomX, randomY));
   }
+}
+
+public void iniciar() {
 }
 
 public void cargarValores() {
