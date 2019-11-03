@@ -27,8 +27,9 @@ float acidity, humidity, nutrientsProb;
 boolean oxygen;
 int deathBacterias;
 int bacteriaType = 0;
-boolean inicio = true;
 float imageWidth;
+boolean inicio = true;
+PImage logo;
 
 //Setup
 void setup() {
@@ -43,6 +44,8 @@ void setup() {
   oxygen = true;
   initControls();
   imageWidth = width * 1.5;
+  camera(imageWidth, height * 0.5, (height/2.0) / tan(PI*30.0 / 180.0), imageWidth, height * 0.5, 0, 0, 1, 0);
+  logo = loadImage("images/logo.png");
 }
 
 //Draw
@@ -51,56 +54,62 @@ void draw() {
   fill(0);
   initText();
   if (inicio) {
-    PImage logo = loadImage("images/logo.png");
-    image(logo, width, 0, width, height);
-    while (imageWidth > width * 0.5) {
-      camera(imageWidth, height * 0.5, (height/2.0) / tan(PI*30.0 / 180.0), imageWidth, height * 0.5, 0, 0, 1, 0);
-      imageWidth--;
-    }
-  } else {
 
-    petri.display(humidity);  
-    box2d.step();    
-    ArrayList<Bacteria> nuevasBac = new ArrayList();
-    //Proceso Bacterias
-    for (Bacteria bacteria : bacterias) {
-      bacteria.display();
-      if (!bacteria.dead) {
-        bacteria.applyAll();
-        bacteria.isDead();
+    image(logo, width, 0, width, height);
+  } else {
+    if (imageWidth > width * 0.5) {
+      image(logo, width, 0, width, height);
+      camera(imageWidth, height * 0.5, (height/2.0) / tan(PI*30.0 / 180.0), imageWidth, height * 0.5, 0, 0, 1, 0);
+      imageWidth-=15;
+    } else {
+      camera( width * 0.5, height * 0.5, (height/2.0) / tan(PI*30.0 / 180.0), width * 0.5, height * 0.5, 0, 0, 1, 0);
+      petri.display(humidity);  
+      box2d.step();    
+      ArrayList<Bacteria> nuevasBac = new ArrayList();
+      //Proceso Bacterias
+      for (Bacteria bacteria : bacterias) {
+        bacteria.display();
         if (!bacteria.dead) {
-          if (bacteria.isReady()) {
-            bacteria.restart();
-            Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
-            bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
-            newBac.energy = bacteria.energy;
-            nuevasBac.add(newBac);
+          bacteria.applyAll();
+          bacteria.isDead();
+          if (!bacteria.dead) {
+            if (bacteria.isReady()) {
+              bacteria.restart();
+              Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
+              bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
+              newBac.energy = bacteria.energy;
+              nuevasBac.add(newBac);
+            }
+            if (bacteria.generateTrash()) 
+              waste.add(new Trash(bacteria.x, bacteria.y));
           }
-          if (bacteria.generateTrash()) 
-            waste.add(new Trash(bacteria.x, bacteria.y));
         }
       }
+
+      for (Bacteria bac : nuevasBac) 
+        bacterias.add(bac);
+
+      if (random(1) < nutrientsProb && frameCount % 10 == 0) 
+        nutrients.add( new Nutrient());
+
+      //Proceso Nutrientes
+      Iterator<Nutrient> itN = nutrients.iterator();
+      while (itN.hasNext()) {
+        Nutrient nutrient = itN.next();
+        nutrient.display();
+        nutrient.aliment();
+        if (nutrient.isDead()) 
+          itN.remove();
+      }
+
+      for (Trash trash : waste) 
+        trash.display();
     }
-
-    for (Bacteria bac : nuevasBac) 
-      bacterias.add(bac);
-
-    if (random(1) < nutrientsProb && frameCount % 10 == 0) 
-      nutrients.add( new Nutrient());
-
-    //Proceso Nutrientes
-    Iterator<Nutrient> itN = nutrients.iterator();
-    while (itN.hasNext()) {
-      Nutrient nutrient = itN.next();
-      nutrient.display();
-      nutrient.aliment();
-      if (nutrient.isDead()) 
-        itN.remove();
-    }
-
-    for (Trash trash : waste) 
-      trash.display();
   }
+}
+
+void keyPressed() {
+  if (key == ' ') inicio = false;
 }
 
 void initControls() {
@@ -150,13 +159,6 @@ void initControls() {
   popMatrix();
 }
 
-void keyPressed() {
-  if (key == ' ') {
-    camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
-    reiniciar();
-    inicio = false;
-  }
-}
 
 void initText() {
   textSize(35);
@@ -171,7 +173,6 @@ void initText() {
   text("Jose Fabio Hidalgo", width  - 180, height- 60); 
   text("Gerardo Villalobos Villalobos", width  - 180, height- 40); 
   text("Gabriel Vindas Brenes", width  - 180, height- 20);
-  PImage logo = loadImage("images/logo.png");
   image(logo, width - 200, 20, 174.29, 136);
 }
 
