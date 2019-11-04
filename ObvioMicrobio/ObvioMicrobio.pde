@@ -35,14 +35,12 @@ State state;
 //Setup
 void setup() {
   fullScreen(P3D);
-
-
-  deathBacterias = 0;
-
-  bacterias = new ArrayList();
-  nutrients = new ArrayList();
-  waste = new ArrayList();
-
+  box2d = new Box2DProcessing(this);
+  box2d.createWorld(new Vec2(0, 0));
+  box2d.listenForCollisions();
+  petri = new Petri();
+  initControls();
+  reiniciar();
   imageWidth = width * 2.2;
   imageProf = 10;
   imageHeight = -400;
@@ -59,27 +57,18 @@ void draw() {
   initText();
   switch(state) {
   case Title:
-    imageMode(CENTER);
-    image(logo, width*2.5, -500, width*10, height*10);
-
+    image(logo, width*-2.5, height * -5.5, width*10, height*10);
     break;
   case Animation:
     if (inicioCont > 0) {
-      image(logo, width*2.5, -500, width*10, height*10);
-      camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
-      imageWidth = map(inicioCont, 0, 100, width * 0.5, width * 2.2);
-      imageHeight = map(inicioCont, 0, 100, height/2, -400);
-      imageProf = map(inicioCont, 0, 100, 1.0, 10.0);
       inicioCont--;
+      image(logo, width*-2.5, height * -5.5, width*10, height*10);
+      imageWidth = map(inicioCont, 0, 100, width/2.0, width * 2.2);
+      imageHeight = map(inicioCont, 0, 100, height/2.0, -400);
+      imageProf = map(inicioCont, 0, 100, 1, 10);
+      camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
     } else {
-      camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
       state = State.Simulation;
-      box2d = new Box2DProcessing(this);
-      box2d.createWorld(new Vec2(0, 0));
-      box2d.listenForCollisions();
-      petri = new Petri();
-      initControls();
-      reiniciar();
     }
     break;
   default:
@@ -160,7 +149,6 @@ void initControls() {
     .setValue(0)
     .setPosition(10, height - 35)
     .setSize(100, 25);
-
   cp5.addDropdownList("Bacteria")
     .setPosition(10, 190)
     .setBackgroundColor(color(0, 45, 90))
@@ -192,7 +180,7 @@ void initText() {
   text("Jose Fabio Hidalgo", width  - 180, height- 60); 
   text("Gerardo Villalobos Villalobos", width  - 180, height- 40); 
   text("Gabriel Vindas Brenes", width  - 180, height- 20);
-  image(logo, width - 90, 75, 174.29, 136);
+  image(logo, width - 200, 20, 174.29, 136);
 }
 
 void beginContact(Contact c) {
@@ -226,7 +214,6 @@ public void applyContact(Contact c, boolean contact) {
 }
 
 public void reiniciar() {
-
   cargarValores();
   deathBacterias = 0;
   bacterias = new ArrayList();
@@ -234,7 +221,7 @@ public void reiniciar() {
   waste = new ArrayList();
   float randomX, randomY;
   double distance;
-  for (int i = 0; i < 150; i++) {
+  for (int i = 0; i < 15; i++) {
     do {
       randomX = random(width);
       randomY = random(height);
