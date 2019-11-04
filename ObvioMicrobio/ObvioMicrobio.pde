@@ -71,7 +71,7 @@ void draw() {
       state = State.Simulation;
     }
     break;
-  default:
+  }
     petri.display(humidity);  
     box2d.step();    
     ArrayList<Bacteria> nuevasBac = new ArrayList();
@@ -113,7 +113,7 @@ void draw() {
 
     for (Trash trash : waste) 
       trash.display();
-  }
+  
 }
 
 void keyPressed() {
