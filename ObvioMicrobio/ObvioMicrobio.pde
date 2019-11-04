@@ -35,18 +35,17 @@ State state;
 //Setup
 void setup() {
   fullScreen(P3D);
-  box2d = new Box2DProcessing(this);
-  box2d.createWorld(new Vec2(0, 0));
-  box2d.listenForCollisions();
-  petri = new Petri();
+
+
+  deathBacterias = 0;
+
   bacterias = new ArrayList();
   nutrients = new ArrayList();
   waste = new ArrayList();
-  oxygen = true;
-  initControls();
-  imageWidth = width * 1.2;
+
+  imageWidth = width * 2.2;
   imageProf = 10;
-  imageHeight = 0;
+  imageHeight = -400;
   inicioCont = 100;
   state = State.Title;
   logo = loadImage("images/logo.png");
@@ -61,19 +60,25 @@ void draw() {
   switch(state) {
   case Title:
     imageMode(CENTER);
-    image(logo, width*1.7, -400, width*8, height*8);
+    image(logo, width*2.5, -500, width*10, height*10);
+
     break;
   case Animation:
-    if (imageWidth != width * 0.5 || imageHeight !=height/2 ||  imageProf != 1) {
-      image(logo, width*1.7, -400, width*8, height*8);
+    if (inicioCont > 0) {
+      image(logo, width*2.5, -500, width*10, height*10);
       camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
-      imageWidth = map(inicioCont, 0, 100, width * 0.5, width * 1.2);
-      imageHeight = map(inicioCont, 0, 100, height/2, 0);
+      imageWidth = map(inicioCont, 0, 100, width * 0.5, width * 2.2);
+      imageHeight = map(inicioCont, 0, 100, height/2, -400);
       imageProf = map(inicioCont, 0, 100, 1.0, 10.0);
       inicioCont--;
     } else {
       camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
       state = State.Simulation;
+      box2d = new Box2DProcessing(this);
+      box2d.createWorld(new Vec2(0, 0));
+      box2d.listenForCollisions();
+      petri = new Petri();
+      initControls();
       reiniciar();
     }
     break;
@@ -187,7 +192,7 @@ void initText() {
   text("Jose Fabio Hidalgo", width  - 180, height- 60); 
   text("Gerardo Villalobos Villalobos", width  - 180, height- 40); 
   text("Gabriel Vindas Brenes", width  - 180, height- 20);
-  image(logo, width - 200, 20, 174.29, 136);
+  image(logo, width - 90, 75, 174.29, 136);
 }
 
 void beginContact(Contact c) {
@@ -221,6 +226,7 @@ public void applyContact(Contact c, boolean contact) {
 }
 
 public void reiniciar() {
+
   cargarValores();
   deathBacterias = 0;
   bacterias = new ArrayList();
@@ -228,12 +234,12 @@ public void reiniciar() {
   waste = new ArrayList();
   float randomX, randomY;
   double distance;
-  for (int i = 0; i < 15; i++) {
+  for (int i = 0; i < 150; i++) {
     do {
       randomX = random(width);
       randomY = random(height);
       distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
-    } while (distance >  height / 2 - 20);
+    } while (distance >  height / 2 - 40);
     bacterias.add(crearBacteria(randomX, randomY));
   }
 }
