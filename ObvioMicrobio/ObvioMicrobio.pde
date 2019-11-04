@@ -11,6 +11,10 @@ import java.lang.Object;
 //Librería ControlP5
 import controlP5.*;
 
+enum State {
+  Title, Animation, Simulation
+};
+
 //Variables Globales
 Petri petri;
 Box2DProcessing box2d;
@@ -22,9 +26,11 @@ float acidity, humidity, nutrientsProb;
 boolean oxygen;
 int deathBacterias;
 int bacteriaType = 0;
-float imageWidth;
+float imageWidth, imageProf, imageHeight, inicioCont;
 boolean inicio = true;
 PImage logo;
+State state;
+
 
 //Setup
 void setup() {
@@ -38,9 +44,13 @@ void setup() {
   waste = new ArrayList();
   oxygen = true;
   initControls();
-  imageWidth = width * 1.5;
-  camera(imageWidth, height * 0.5, (height/2.0) / tan(PI*30.0 / 180.0), imageWidth, height * 0.5, 0, 0, 1, 0);
+  imageWidth = width * 1.2;
+  imageProf = 10;
+  imageHeight = 0;
+  inicioCont = 100;
+  state = State.Title;
   logo = loadImage("images/logo.png");
+  camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
 }
 
 //Draw
@@ -48,14 +58,26 @@ void draw() {
   background(255);
   fill(0);
   initText();
-  if (inicio) {
-    image(logo, width, 0, width, height);
-  } else {
-    if (imageWidth > width * 0.5) {
-      image(logo, width, 0, width, height);
-      camera(imageWidth, height * 0.5, (height/2.0) / tan(PI*30.0 / 180.0), imageWidth, height * 0.5, 0, 0, 1, 0);
-      imageWidth-=15;
-    } 
+  switch(state) {
+  case Title:
+    imageMode(CENTER);
+    image(logo, width*1.7, -400, width*8, height*8);
+    break;
+  case Animation:
+    if (imageWidth != width * 0.5 || imageHeight !=height/2 ||  imageProf != 1) {
+      image(logo, width*1.7, -400, width*8, height*8);
+      camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
+      imageWidth = map(inicioCont, 0, 100, width * 0.5, width * 1.2);
+      imageHeight = map(inicioCont, 0, 100, height/2, 0);
+      imageProf = map(inicioCont, 0, 100, 1.0, 10.0);
+      inicioCont--;
+    } else {
+      camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
+      state = State.Simulation;
+      reiniciar();
+    }
+    break;
+  default:
     petri.display(humidity);  
     box2d.step();    
     ArrayList<Bacteria> nuevasBac = new ArrayList();
@@ -94,14 +116,14 @@ void draw() {
       if (nutrient.isDead()) 
         itN.remove();
     }
-    
+
     for (Trash trash : waste) 
       trash.display();
   }
 }
 
 void keyPressed() {
-  if (key == ' ') inicio = false;
+  if (key == ' ' && state == State.Title) state = State.Animation;
 }
 
 void initControls() {
