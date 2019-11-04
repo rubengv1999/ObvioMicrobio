@@ -34,7 +34,7 @@ class Petri {
 
   void display(float level) {
     colorMode(HSB, 255,255,255);
-     stroke( color(map(acidity, 0, 14, 0, 255), 255, 255), 200);
+     stroke( color(map(acidity, 0, 14, 0, 200), 255, 255), 200);
     strokeWeight(5);    
      colorMode(RGB, 255, 255, 255);
     if (level<0.9) {

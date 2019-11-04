@@ -43,10 +43,10 @@ void setup() {
   reiniciar();
   imageWidth = width * 2.2;
   imageProf = 10;
-  imageHeight = -400;
+  imageHeight = -500;
   inicioCont = 100;
   state = State.Title;
-  logo = loadImage("images/logo.png");
+  logo = loadImage("images/LogoOM.png");
   camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
 }
 
@@ -57,63 +57,63 @@ void draw() {
   initText();
   switch(state) {
   case Title:
-    image(logo, width*-2.5, height * -5.5, width*10, height*10);
+    image(logo, width*-2.75, height * -5.7, width*10, height*10);
     break;
   case Animation:
     if (inicioCont > 0) {
       inicioCont--;
-      image(logo, width*-2.5, height * -5.5, width*10, height*10);
+      image(logo, width*-2.75, height * -5.7, width*10, height*10);
       imageWidth = map(inicioCont, 0, 100, width/2.0, width * 2.2);
-      imageHeight = map(inicioCont, 0, 100, height/2.0, -400);
+      imageHeight = map(inicioCont, 0, 100, height/2.0, -500);
       imageProf = map(inicioCont, 0, 100, 1, 10);
       camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
     } else {
+      logo = loadImage("images/logo.png");
       state = State.Simulation;
     }
     break;
   }
-    petri.display(humidity);  
-    box2d.step();    
-    ArrayList<Bacteria> nuevasBac = new ArrayList();
-    //Proceso Bacterias
-    for (Bacteria bacteria : bacterias) {
-      bacteria.display();
+  petri.display(humidity);  
+  box2d.step();    
+  ArrayList<Bacteria> nuevasBac = new ArrayList();
+  //Proceso Bacterias
+  for (Bacteria bacteria : bacterias) {
+    bacteria.display();
+    if (!bacteria.dead) {
+      bacteria.applyAll();
+      bacteria.isDead();
       if (!bacteria.dead) {
-        bacteria.applyAll();
-        bacteria.isDead();
-        if (!bacteria.dead) {
-          if (bacteria.isReady()) {
-            bacteria.restart();
-            Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
-            bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
-            newBac.energy = bacteria.energy;
-            nuevasBac.add(newBac);
-          }
-          if (bacteria.generateTrash()) 
-            waste.add(new Trash(bacteria.x, bacteria.y));
+        if (bacteria.isReady()) {
+          bacteria.restart();
+          Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
+          bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
+          newBac.energy = bacteria.energy;
+          nuevasBac.add(newBac);
         }
+        if (bacteria.generateTrash()) 
+          waste.add(new Trash(bacteria.x, bacteria.y));
       }
     }
+  }
 
-    for (Bacteria bac : nuevasBac) 
-      bacterias.add(bac);
+  for (Bacteria bac : nuevasBac) 
+    bacterias.add(bac);
 
-    if (random(1) < nutrientsProb && frameCount % 10 == 0) 
-      nutrients.add( new Nutrient());
+  if (random(1) < nutrientsProb && frameCount % 10 == 0) 
+    nutrients.add( new Nutrient());
 
-    //Proceso Nutrientes
-    Iterator<Nutrient> itN = nutrients.iterator();
-    while (itN.hasNext()) {
-      Nutrient nutrient = itN.next();
-      nutrient.display();
-      nutrient.aliment();
-      if (nutrient.isDead()) 
-        itN.remove();
-    }
+  //Proceso Nutrientes
+  Iterator<Nutrient> itN = nutrients.iterator();
+  while (itN.hasNext()) {
+    Nutrient nutrient = itN.next();
+    nutrient.display();
+    nutrient.aliment();
+    if (nutrient.isDead()) 
+      itN.remove();
+  }
 
-    for (Trash trash : waste) 
-      trash.display();
-  
+  for (Trash trash : waste) 
+    trash.display();
 }
 
 void keyPressed() {
