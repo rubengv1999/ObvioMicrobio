@@ -45,7 +45,6 @@ void setup() {
   box2d.createWorld(new Vec2(0, 0));
   box2d.listenForCollisions();
   petri = new Petri();
-  reiniciar();
   initButton();
   imageWidth = width * 2.2;
   imageProf = 10;
@@ -135,7 +134,7 @@ void keyPressed() {
 void initButton() {
   pushMatrix();
   button = new ControlP5(this);
-  cp5.addButton("reiniciar")
+  button.addButton("reiniciar")
     .setValue(0)
     .setPosition(10, height - 35)
     .setSize(100, 25);
