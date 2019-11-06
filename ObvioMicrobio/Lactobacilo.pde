@@ -5,19 +5,6 @@ class Lactobacilo extends CircularBacteria {
     this.incrementSize = 1.0; //especializar
   }
 
-  void display() {
-    noFill();
-    noStroke();
-    rectMode(CENTER);
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    float ang = body.getAngle();
-    pushMatrix();
-    translate(pos.x, pos.y);
-    rotate(-ang);
-    image(img, -(w/2), -(w/2), w, w);
-    popMatrix();
-  }
-
   public void applyOxygen() {
   }
 }

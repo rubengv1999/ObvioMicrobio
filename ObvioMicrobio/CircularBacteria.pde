@@ -17,10 +17,23 @@ abstract class CircularBacteria extends Bacteria {
     fixtureDef.density = 1;
     fixtureDef.friction = 0.3;
     fixtureDef.restitution = 0.5;
-    
+
     body.createFixture(fixtureDef);
     body.setLinearVelocity(speed);//applyForce(speed);
     setRotation();
     body.setUserData(this);
+  }
+
+  void display() {
+    noFill();
+    noStroke();
+    rectMode(CENTER);
+    Vec2 pos = box2d.getBodyPixelCoord(body);
+    float ang = body.getAngle();
+    pushMatrix();
+    translate(pos.x, pos.y);
+    rotate(-ang);
+    image(img, -(w/2), -(w/2), w, w);
+    popMatrix();
   }
 }
