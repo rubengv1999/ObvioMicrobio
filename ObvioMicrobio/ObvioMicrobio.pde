@@ -24,6 +24,7 @@ ArrayList<Bacteria> bacterias;
 ArrayList<Nutrient> nutrients;
 ArrayList<Trash> waste;
 ControlP5 cp5;
+ControlP5 button;
 float acidity, humidity, nutrientsProb;
 boolean oxygen;
 int deathBacterias;
@@ -32,6 +33,9 @@ float imageWidth, imageProf, imageHeight, inicioCont;
 boolean inicio = true;
 PImage logo;
 State state;
+Minim minim;
+AudioSample pop;
+AudioSample death;
 
 
 //Setup
@@ -41,8 +45,8 @@ void setup() {
   box2d.createWorld(new Vec2(0, 0));
   box2d.listenForCollisions();
   petri = new Petri();
-  initControls();
   reiniciar();
+  initButton();
   imageWidth = width * 2.2;
   imageProf = 10;
   imageHeight = -500;
@@ -50,6 +54,9 @@ void setup() {
   state = State.Title;
   logo = loadImage("images/LogoOM.png");
   camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
+  minim = new Minim(this);
+  pop = minim.loadSample("sounds/pop.mp3", 512);
+  death = minim.loadSample("sounds/auch.mp3", 512);
 }
 
 //Draw
@@ -95,8 +102,7 @@ void draw() {
         }
         if (bacteria.generateTrash()) 
           waste.add(new Trash(bacteria.x, bacteria.y));
-      }
-      else{
+      } else {
         deathSound();
       }
     }
@@ -126,6 +132,16 @@ void keyPressed() {
   if (key == ' ' && state == State.Title) state = State.Animation;
 }
 
+void initButton() {
+  pushMatrix();
+  button = new ControlP5(this);
+  cp5.addButton("reiniciar")
+    .setValue(0)
+    .setPosition(10, height - 35)
+    .setSize(100, 25);
+  popMatrix();
+}
+
 void initControls() {
   cargarValores();
   pushMatrix();
@@ -151,10 +167,6 @@ void initControls() {
     .setValue(true)
     .setMode(ControlP5.SWITCH)
     .setColorLabel(0x00000000);
-  cp5.addButton("reiniciar")
-    .setValue(0)
-    .setPosition(10, height - 35)
-    .setSize(100, 25);
   cp5.addDropdownList("Bacteria")
     .setPosition(10, 190)
     .setBackgroundColor(color(0, 45, 90))
@@ -220,7 +232,7 @@ public void applyContact(Contact c, boolean contact) {
 }
 
 public void reiniciar() {
-  cargarValores();
+  initControls();
   deathBacterias = 0;
   bacterias = new ArrayList();
   nutrients = new ArrayList();
@@ -267,22 +279,18 @@ Bacteria crearBacteria(float x, float y) {
 }
 
 void controlEvent(ControlEvent theEvent) {
+
   if (theEvent.isController()) 
     if (theEvent.getController().toString().equals("Bacteria [DropdownList]")) {
       bacteriaType = (int)theEvent.getController().getValue();
       reiniciar();
-      initControls();
     }
 }
 
-void newSound(){
-  Minim minim = new Minim(this);
-  AudioSample pop = minim.loadSample("sounds/pop.mp3", 512);
+void newSound() {
   pop.trigger();
 }
 
-void deathSound(){
-  Minim minim = new Minim(this);
-  AudioSample death = minim.loadSample("sounds/auch.mp3", 512);
+void deathSound() {
   death.trigger();
 }
