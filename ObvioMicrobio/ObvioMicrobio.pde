@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.lang.Object;
 //Librería ControlP5
 import controlP5.*;
+//Libreria Minim
+import ddf.minim.*;
 
 enum State {
   Title, Animation, Simulation
@@ -89,9 +91,13 @@ void draw() {
           bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
           newBac.energy = bacteria.energy;
           nuevasBac.add(newBac);
+          newSound();
         }
         if (bacteria.generateTrash()) 
           waste.add(new Trash(bacteria.x, bacteria.y));
+      }
+      else{
+        deathSound();
       }
     }
   }
@@ -267,4 +273,16 @@ void controlEvent(ControlEvent theEvent) {
       reiniciar();
       initControls();
     }
+}
+
+void newSound(){
+  Minim minim = new Minim(this);
+  AudioSample pop = minim.loadSample("sounds/pop.mp3", 512);
+  pop.trigger();
+}
+
+void deathSound(){
+  Minim minim = new Minim(this);
+  AudioSample death = minim.loadSample("sounds/auch.mp3", 512);
+  death.trigger();
 }
