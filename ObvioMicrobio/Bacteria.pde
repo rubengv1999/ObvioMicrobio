@@ -140,9 +140,9 @@ abstract class Bacteria {
   }
 
   public void applyAcidity() {
-    if (acidity > 9 || acidity < 5) {
+    if (acidity > acidityPerfect + 2 || acidity < acidityPerfect - 2) {
       energy -= 1;
-    } else if (acidity > 10 || acidity < 3) {
+    } else if (acidity > acidityPerfect + 3 || acidity < acidityPerfect - 4) {
       energy -= 5;
     }
   }
