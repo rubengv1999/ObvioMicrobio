@@ -11,7 +11,7 @@ class Estafilococo extends SquareBacteria {
       startMoving();
     } else
     {
-      stopDownOx();
+      slowDown(-1, 0.01);      
     }
   }
 }

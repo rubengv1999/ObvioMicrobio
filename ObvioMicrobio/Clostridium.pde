@@ -10,8 +10,8 @@ class Clostridium extends CircularBacteria {
     {
       startMoving();
     } else
-    {
-      stopDownOx();
+    {      
+      slowDown(-1, 0.01);
     }
   }
 }
