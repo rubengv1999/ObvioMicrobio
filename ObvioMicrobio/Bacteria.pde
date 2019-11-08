@@ -12,6 +12,7 @@ abstract class Bacteria {
   float acidityPerfect;
   float maxSpeed;
   float movPower;
+  boolean stop;
 
   Bacteria(float x, float y, float w, float h) {
     this.x = x;
@@ -23,7 +24,7 @@ abstract class Bacteria {
     this.dead = false;
     this.energy = 100;
     this.trashPercent = 0;
-    this.speedRange = 0.75;  
+    this.speedRange = 0.25;  
     this.acidityPerfect = 7;
     this.movPower = 0.005;
     this.incrementSize = 1.0005;
@@ -33,10 +34,12 @@ abstract class Bacteria {
     this.speed = new Vec2(iniVelX, iniVelY);
     maxSpeed = sqrt(initialSpeed.x*initialSpeed.x + initialSpeed.y*initialSpeed.y);
     nutrients = 0;
+    stop = false;
     createBody();
   }
 
   public void applyAll() {
+    stop = false;
     applyAcidity();
     applyHumidity();
     applyOxygen();
@@ -45,6 +48,7 @@ abstract class Bacteria {
 
   void isDead() {
     if (energy <= 0) {
+      energy = 0;
       dead = true;
       this.img.filter(GRAY);
       deathBacterias++;
@@ -139,6 +143,7 @@ abstract class Bacteria {
   public void applyHumidity() {
     if (humidity < 0.9) {
       slowDown(humidity, 0.9);
+      stop = true;
     } else {
       startMoving();
     }

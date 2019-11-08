@@ -3,9 +3,10 @@ class Clostridium extends CircularBacteria {
     super(x, y, 13, 13);
     this.img = loadImage("images/clostridium.png");
   }
+  
 
   public void applyOxygen() {
-    if (oxygen)
+    if (oxygen && !stop)
     {
       startMoving();
     } else

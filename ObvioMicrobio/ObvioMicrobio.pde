@@ -32,10 +32,14 @@ int bacteriaType = 0;
 float imageWidth, imageProf, imageHeight, inicioCont;
 boolean inicio = true;
 PImage logo;
+PImage extintion;
 State state;
 Minim minim;
 AudioSample pop;
 AudioSample death;
+long time;
+float globalStatus;
+
 
 
 //Setup
@@ -46,12 +50,13 @@ void setup() {
   box2d.listenForCollisions();
   petri = new Petri();
   initButton();
-  imageWidth = width * 2.2;
+  imageWidth = width * 2.5;
   imageProf = 10;
   imageHeight = -500;
   inicioCont = 100;
   state = State.Title;
-  logo = loadImage("images/LogoOM.png");
+  extintion = loadImage("images/extintion.png");
+  logo = loadImage("images/LogoZ.jpg");
   camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
   minim = new Minim(this);
   pop = minim.loadSample("sounds/pop.mp3", 512);
@@ -65,13 +70,13 @@ void draw() {
   initText();
   switch(state) {
   case Title:
-    image(logo, width*-2.75, height * -5.7, width*10, height*10);
+    image(logo, width*-2.65, height * -5.7, width*10, height*10);
     break;
   case Animation:
     if (inicioCont > 0) {
       inicioCont--;
-      image(logo, width*-2.75, height * -5.7, width*10, height*10);
-      imageWidth = map(inicioCont, 0, 100, width/2.0, width * 2.2);
+      image(logo, width*-2.65, height * -5.7, width*10, height*10);
+      imageWidth = map(inicioCont, 0, 100, width/2.0, width * 2.5);
       imageHeight = map(inicioCont, 0, 100, height/2.0, -500);
       imageProf = map(inicioCont, 0, 100, 1, 10);
       camera(imageWidth, imageHeight, (height/2.0) / tan(PI*30.0 / 180.0) * imageProf, imageWidth, imageHeight, 0, 0, 1, 0);
@@ -85,6 +90,7 @@ void draw() {
   box2d.step();    
   ArrayList<Bacteria> nuevasBac = new ArrayList();
   //Proceso Bacterias
+  globalStatus = 0;
   for (Bacteria bacteria : bacterias) {
     bacteria.display();
     if (!bacteria.dead) {
@@ -96,9 +102,11 @@ void draw() {
           Bacteria newBac = crearBacteria(bacteria.x, bacteria.y);
           bacteria.energy = map(bacteria.energy, 0, 100, bacteria.energy, 100);
           newBac.energy = bacteria.energy;
+          globalStatus += newBac.energy;
           nuevasBac.add(newBac);
           newSound();
         }
+        globalStatus += bacteria.energy;
         if (bacteria.generateTrash()) 
           waste.add(new Trash(bacteria.x, bacteria.y));
       } else {
@@ -125,6 +133,9 @@ void draw() {
 
   for (Trash trash : waste) 
     trash.display();
+
+  if (bacterias.size() - deathBacterias == 0) 
+    image(extintion, width*0.25, height*0.07, height*0.9, height*0.9);
 }
 
 void keyPressed() {
@@ -134,7 +145,7 @@ void keyPressed() {
 void initButton() {
   pushMatrix();
   button = new ControlP5(this);
-  button.addButton("reiniciar")
+  button.addButton("restart")
     .setValue(0)
     .setPosition(10, height - 35)
     .setSize(100, 25);
@@ -188,7 +199,11 @@ void initText() {
   textSize(35);
   text("Parameters", 15, 40); 
   textSize(12);
-  text("Alive Bacterias: " + (bacterias.size() - deathBacterias), 10, height - 125); 
+  text("Time: " + ((System.currentTimeMillis() -time)/1000.0) + " seconds", 10, height - 175);
+  int live = bacterias.size() - deathBacterias;
+  float liveAverage = live == 0? 0  : globalStatus / live;
+  text("Life Average: " + liveAverage + "%", 10, height - 150); 
+  text("Alive Bacterias: " + live, 10, height - 125); 
   text("Death bacterias: " + deathBacterias, 10, height - 100); 
   text("Nutrients: " + nutrients.size(), 10, height - 75); 
   text("Waste: " + waste.size(), 10, height - 50); 
@@ -230,8 +245,9 @@ public void applyContact(Contact c, boolean contact) {
   }
 }
 
-public void reiniciar() {
+public void restart() {
   initControls();
+  time =  System.currentTimeMillis();
   deathBacterias = 0;
   bacterias = new ArrayList();
   nutrients = new ArrayList();
@@ -283,7 +299,7 @@ void controlEvent(ControlEvent theEvent) {
   if (theEvent.isController()) 
     if (theEvent.getController().toString().equals("Bacteria [DropdownList]")) {
       bacteriaType = (int)theEvent.getController().getValue();
-      reiniciar();
+      restart();
     }
 }
 

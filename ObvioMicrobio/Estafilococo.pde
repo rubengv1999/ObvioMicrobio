@@ -5,7 +5,7 @@ class Estafilococo extends SquareBacteria {
   }
 
   public void applyOxygen() {
-    if (oxygen)
+    if (oxygen && !stop)
     {
       startMoving();
     } else

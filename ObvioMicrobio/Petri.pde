@@ -33,12 +33,12 @@ class Petri {
   }
 
   void display(float level) {
-    colorMode(HSB, 255,255,255);
-     stroke( color(map(acidity, 0, 14, 0, 200), 255, 255), 200);
+    colorMode(HSB, 255, 255, 255);
+    stroke( color(map(acidity, 0, 14, 0, 200), 200, 200));
     strokeWeight(5);    
-     colorMode(RGB, 255, 255, 255);
+    colorMode(RGB, 255, 255, 255);
     if (level<0.9) {
-        
+
       colorMode(HSB, 360, 100, 100);     
       color chumidity = color(map(level, 0, 1, 25, 0), map(level, 0, 1, 30, 0), 94.5);
       fill(chumidity);
