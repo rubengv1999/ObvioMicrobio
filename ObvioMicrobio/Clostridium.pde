@@ -5,7 +5,7 @@ class Clostridium extends CircularBacteria {
   }
 
   public void applyOxygen() {
-    if (oxygen)
+    if (oxygen && humidity >= 0.9)
     {
       startMoving();
     } else
