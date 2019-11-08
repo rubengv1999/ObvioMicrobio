@@ -243,7 +243,8 @@ public void reiniciar() {
       randomX = random(width);
       randomY = random(height);
       distance = Math.hypot(Math.abs(height/2 - randomY), Math.abs(width/2 - randomX));
-    } while (distance >  height / 2 - 40);
+    } while (distance >  100);
+    //} while (distance >  height / 2 - 60);
     bacterias.add(crearBacteria(randomX, randomY));
   }
 }

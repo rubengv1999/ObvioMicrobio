@@ -26,6 +26,7 @@ abstract class Bacteria {
     this.speedRange = 0.75;  
     this.acidityPerfect = 7;
     this.movPower = 0.005;
+    this.incrementSize = 1.0005;
     iniVelX = random(-speedRange, speedRange);
     iniVelY = random(-speedRange, speedRange);
     initialSpeed = new Vec2(iniVelX, iniVelY);
@@ -108,7 +109,7 @@ abstract class Bacteria {
       createBody();
       energy -= 0.001;
     } else {
-      energy -= 0.01;
+      energy -= 0.005;
     }
   }
 
