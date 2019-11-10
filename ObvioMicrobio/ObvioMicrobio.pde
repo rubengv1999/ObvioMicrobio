@@ -74,7 +74,7 @@ void draw() {
     break;
   case Animation:
     if (inicioCont > 0) {
-      inicioCont--;
+      inicioCont-=0.25;
       image(logo, width*-2.65, height * -5.7, width*10, height*10);
       imageWidth = map(inicioCont, 0, 100, width/2.0, width * 2.5);
       imageHeight = map(inicioCont, 0, 100, height/2.0, -500);
