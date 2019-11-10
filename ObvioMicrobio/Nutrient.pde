@@ -28,7 +28,7 @@ class Nutrient {
     body = box2d.createBody(bodyDef);
 
     CircleShape shape = new CircleShape();
-    shape.setRadius(box2d.scalarPixelsToWorld(size));
+    shape.setRadius(box2d.scalarPixelsToWorld(size/2));
 
     FixtureDef fixtureDef = new FixtureDef();
     fixtureDef.shape = shape;
