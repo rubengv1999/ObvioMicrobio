@@ -1,18 +1,10 @@
 abstract class Bacteria {
-  float x, y, w, h, energy, initW, initH, incrementSize, trashPercent;
+  float x, y, w, h, energy, initW, initH, incrementSize, trashPercent,iniVelX,iniVelY,acidityPerfect,maxSpeed,speedRange,movPower;
   Body body;
-  Vec2 speed;
+  Vec2 speed,initialSpeed;
   PImage img;
-  boolean dead;
+  boolean dead,stop;
   int nutrients;
-  float speedRange;
-  Vec2 initialSpeed;
-  float iniVelX;
-  float iniVelY;
-  float acidityPerfect;
-  float maxSpeed;
-  float movPower;
-  boolean stop;
 
   Bacteria(float x, float y, float w, float h) {
     this.x = x;
